@@ -4,6 +4,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 import {
   Shield,
   Scan,
@@ -65,12 +66,16 @@ export default function TrueLedgerLandingMerged() {
             </div>
 
             <div className="flex items-center space-x-3">
+              <Link href="/signin">
               <Button variant="ghost" size="sm" className="text-gray-300 hover:text-white">
                 Sign In
               </Button>
+              </Link>
+              <Link href="/signup">
               <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-black font-medium">
                 Get Started
               </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -94,14 +99,19 @@ export default function TrueLedgerLandingMerged() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-black font-medium px-6 flex items-center justify-center">
-              <Upload className="w-5 h-5 mr-2" />
-              Upload Certificate
-            </Button>
-            <Button size="lg" variant="outline" className="border-gray-700 hover:bg-gray-900 text-white flex items-center justify-center">
-              <Shield className="w-5 h-5 mr-2" />
-              Verify Now
-            </Button>
+            <Link href="/signup">
+              <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-black font-medium px-6 flex items-center justify-center">
+                <Upload className="w-5 h-5 mr-2" />
+                Upload Certificate
+              </Button>
+            </Link>
+
+            <Link href="/signin">
+              <Button size="lg" variant="outline" className="border-gray-700 hover:bg-gray-900 text-white flex items-center justify-center">
+                <Shield className="w-5 h-5 mr-2" />
+                Verify Now
+              </Button>
+            </Link>
           </div>
 
           {/* Composite Hero Visual: glass card + dark framed demo */}
@@ -250,11 +260,17 @@ export default function TrueLedgerLandingMerged() {
             <p className="text-gray-400 mb-6">Join institutions worldwide securing credentials on the blockchain. Try our public verification API or start a trial.</p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="glow" size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-black font-medium px-6 flex items-center">
-                Start Free Trial
-                <ArrowRight className="w-4 h-4 ml-3" />
+              <Link href="/signup">
+                <Button variant="glow" size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-black font-medium px-6 flex items-center">
+                  Start Free Trial
+                  <ArrowRight className="w-4 h-4 ml-3" />
+                </Button>
+              </Link>
+              <Link href="/contact">
+              <Button variant="outline" size="lg" className="border-gray-700 hover:bg-gray-900 text-white">
+                Schedule Demo
               </Button>
-              <Button variant="outline" size="lg" className="border-gray-700 hover:bg-gray-900 text-white">Schedule Demo</Button>
+            </Link>
             </div>
           </div>
         </div>
