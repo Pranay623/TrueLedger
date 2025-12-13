@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Award,
   BarChart3,
@@ -15,227 +15,162 @@ import {
   Settings,
   FileText,
   Search,
-  Bell,
   HelpCircle,
   ChevronLeft,
   ChevronRight,
   Home,
   Database,
-} from "lucide-react"
+} from "lucide-react";
 
 interface SidebarProps {
-  className?: string
+  className?: string;
 }
 
 const navigationItems = [
-  {
-    title: "Overview",
-    href: "/dashboard",
-    icon: Home,
-    description: "Dashboard overview and stats"
-  },
-  {
-    title: "Certificates",
-    href: "/dashboard/certificates",
-    icon: Award,
-    badge: "124",
-    description: "Manage all certificates"
-  },
-  {
-    title: "Upload",
-    href: "/dashboard/upload",
-    icon: Upload,
-    description: "Upload new certificates"
-  },
-  {
-    title: "Verify",
-    href: "/dashboard/verify",
-    icon: Shield,
-    description: "Verify certificates"
-  },
-  {
-    title: "Analytics",
-    href: "/dashboard/analytics",
-    icon: BarChart3,
-    description: "View detailed analytics"
-  },
-  {
-    title: "Students",
-    href: "/dashboard/students",
-    icon: Users,
-    badge: "1.2k",
-    description: "Manage students"
-  },
-  {
-    title: "Reports",
-    href: "/dashboard/reports",
-    icon: FileText,
-    description: "Generate reports"
-  },
-  {
-    title: "Search",
-    href: "/dashboard/search",
-    icon: Search,
-    description: "Search certificates"
-  }
-]
+  { title: "Overview", href: "/dashboard", icon: Home },
+  { title: "Certificates", href: "/dashboard/certificates", icon: Award, badge: "124" },
+  { title: "Upload", href: "/dashboard/upload", icon: Upload },
+  { title: "Verify", href: "/dashboard/verify", icon: Shield },
+  { title: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
+  { title: "Students", href: "/dashboard/students", icon: Users, badge: "1.2k" },
+  { title: "Reports", href: "/dashboard/reports", icon: FileText },
+  { title: "Search", href: "/dashboard/search", icon: Search },
+];
 
 const bottomItems = [
-  {
-    title: "Settings",
-    href: "/dashboard/settings",
-    icon: Settings,
-    description: "Account settings"
-  },
-  {
-    title: "Help",
-    href: "/dashboard/help",
-    icon: HelpCircle,
-    description: "Get help and support"
-  }
-]
+  { title: "Settings", href: "/dashboard/settings", icon: Settings },
+  { title: "Help", href: "/dashboard/help", icon: HelpCircle },
+];
 
 export default function DashboardSidebar({ className }: SidebarProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false)
-  const pathname = usePathname()
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const pathname = usePathname();
 
   return (
-    <div className={cn(
-      "flex flex-col bg-white border-r border-gray-200 transition-all duration-300",
-      isCollapsed ? "w-16" : "w-64",
-      className
-    )}>
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200">
+    <aside
+      className={cn(
+        "flex flex-col bg-black/60 backdrop-blur-xl border-r border-emerald-900/20 transition-all duration-300",
+        isCollapsed ? "w-16" : "w-64",
+        className
+      )}
+    >
+      {/* HEADER */}
+      <div className="flex items-center justify-between px-4 py-4 border-b border-emerald-900/20">
         {!isCollapsed && (
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 rounded-lg flex items-center justify-center">
-              <Award className="w-5 h-5 text-white" />
+          <Link href="/" className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center">
+              <Award className="w-5 h-5 text-black" />
             </div>
-            <div>
-              <span className="text-lg font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
-                SmartCertify
-              </span>
-            </div>
-          </div>
+            <span className="text-lg font-mono text-white">
+              True<span className="text-gradient ml-1">Ledger</span>
+            </span>
+          </Link>
         )}
         <Button
           variant="ghost"
-          size="sm"
+          size="icon"
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="p-2"
+          className="text-gray-400 hover:text-white"
         >
-          {isCollapsed ? (
-            <ChevronRight className="w-4 h-4" />
-          ) : (
-            <ChevronLeft className="w-4 h-4" />
-          )}
+          {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
         </Button>
       </div>
 
-      {/* Navigation */}
-      <div className="flex-1 flex flex-col p-4">
-        <nav className="space-y-2">
-          {navigationItems.map((item) => {
-            const isActive = pathname === item.href
-            const Icon = item.icon
+      {/* NAV */}
+      <nav className="flex-1 px-3 py-4 space-y-1">
+        {navigationItems.map((item) => {
+          const isActive = pathname === item.href;
+          const Icon = item.icon;
 
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors group relative",
-                  isActive
-                    ? "bg-blue-50 text-blue-700"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                )}
-              >
-                <Icon className={cn("w-5 h-5 flex-shrink-0", isActive ? "text-blue-600" : "text-gray-400")} />
-                {!isCollapsed && (
-                  <>
-                    <span className="flex-1">{item.title}</span>
-                    {item.badge && (
-                      <Badge variant="secondary" className="text-xs px-2 py-0.5">
-                        {item.badge}
-                      </Badge>
-                    )}
-                  </>
-                )}
-                
-                {/* Tooltip for collapsed state */}
-                {isCollapsed && (
-                  <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50">
-                    {item.title}
-                    {item.badge && (
-                      <Badge variant="secondary" className="ml-2 text-xs">
-                        {item.badge}
-                      </Badge>
-                    )}
-                  </div>
-                )}
-              </Link>
-            )
-          })}
-        </nav>
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "group relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all",
+                isActive
+                  ? "bg-emerald-900/20 text-emerald-300"
+                  : "text-gray-400 hover:bg-gray-900 hover:text-white"
+              )}
+            >
+              <Icon className={cn("w-5 h-5", isActive ? "text-emerald-400" : "text-gray-500")} />
 
-        {/* Storage Usage */}
-        {!isCollapsed && (
-          <div className="mt-8 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-100">
-            <div className="flex items-center space-x-2 mb-2">
-              <Database className="w-4 h-4 text-blue-600" />
-              <span className="text-sm font-medium text-gray-900">Storage Usage</span>
+              {!isCollapsed && (
+                <>
+                  <span className="flex-1">{item.title}</span>
+                  {item.badge && (
+                    <Badge className="bg-emerald-900/30 text-emerald-300 text-xs">
+                      {item.badge}
+                    </Badge>
+                  )}
+                </>
+              )}
+
+              {/* Tooltip (collapsed) */}
+              {isCollapsed && (
+                <div className="absolute left-full ml-2 px-3 py-2 bg-black border border-gray-800 rounded-md text-xs text-white opacity-0 group-hover:opacity-100 pointer-events-none">
+                  {item.title}
+                </div>
+              )}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* STORAGE */}
+      {!isCollapsed && (
+        <div className="px-4 pb-4">
+          <div className="rounded-xl bg-gradient-to-br from-emerald-900/10 to-teal-900/10 border border-emerald-900/20 p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Database className="w-4 h-4 text-emerald-400" />
+              <span className="text-sm text-gray-300 font-medium">Storage Usage</span>
             </div>
+
             <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Used</span>
-                <span className="font-medium">2.4 GB / 10 GB</span>
+              <div className="flex justify-between text-xs text-gray-400">
+                <span>Used</span>
+                <span>2.4 GB / 10 GB</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 rounded-full" style={{ width: '24%' }} />
+              <div className="w-full h-2 bg-gray-800 rounded-full">
+                <div className="h-2 w-[24%] bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full" />
               </div>
-              <Button variant="outline" size="sm" className="w-full text-xs">
+              <Button size="sm" variant="outline" className="w-full mt-2 border-emerald-800/30 text-emerald-300">
                 Upgrade Plan
               </Button>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
-      {/* Bottom Items */}
-      <div className="p-4 border-t border-gray-200">
-        <nav className="space-y-2">
-          {bottomItems.map((item) => {
-            const isActive = pathname === item.href
-            const Icon = item.icon
+      {/* FOOTER */}
+      <div className="border-t border-emerald-900/20 px-3 py-4 space-y-1">
+        {bottomItems.map((item) => {
+          const isActive = pathname === item.href;
+          const Icon = item.icon;
 
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors group relative",
-                  isActive
-                    ? "bg-blue-50 text-blue-700"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                )}
-              >
-                <Icon className={cn("w-5 h-5 flex-shrink-0", isActive ? "text-blue-600" : "text-gray-400")} />
-                {!isCollapsed && (
-                  <span className="flex-1">{item.title}</span>
-                )}
-                
-                {/* Tooltip for collapsed state */}
-                {isCollapsed && (
-                  <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50">
-                    {item.title}
-                  </div>
-                )}
-              </Link>
-            )
-          })}
-        </nav>
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "group relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition",
+                isActive
+                  ? "bg-emerald-900/20 text-emerald-300"
+                  : "text-gray-400 hover:bg-gray-900 hover:text-white"
+              )}
+            >
+              <Icon className="w-5 h-5" />
+              {!isCollapsed && <span>{item.title}</span>}
+
+              {isCollapsed && (
+                <div className="absolute left-full ml-2 px-3 py-2 bg-black border border-gray-800 rounded-md text-xs text-white opacity-0 group-hover:opacity-100">
+                  {item.title}
+                </div>
+              )}
+            </Link>
+          );
+        })}
       </div>
-    </div>
-  )
+    </aside>
+  );
 }

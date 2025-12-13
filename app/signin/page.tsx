@@ -13,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useAuth } from "@/lib/auth-context";
+import { AlertTriangle } from "lucide-react";
 
 import {
   Award,
@@ -33,6 +35,7 @@ import {
 import { useAuthForm } from "@/lib/auth-context";
 import { signinSchema, SigninFormData } from "@/lib/auth-types";
 import { isApiError } from "@/lib/auth-api";
+import { signIn } from "next-auth/react";
 
 export default function SigninPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -55,10 +58,26 @@ export default function SigninPage() {
 
   const onSubmit = async (data: SigninFormData) => {
     try {
-      setError(null);
-      clearErrors();
+      const res = await fetch("/api/signin", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data),
+      });
 
-      await signin(data);
+      const response = await res.json();
+
+      if(!res.ok){
+        if(response.errors){
+          response.errors.forEach((err: { field: string; message: string }) => {
+            setFormError(err.field as keyof SigninFormData, {
+              type: "server",
+              message: err.message,
+            });
+          });
+          setError(response.message || "Signin failed");
+          return;
+        }
+      }
 
       router.push("/dashboard");
     } catch (error) {

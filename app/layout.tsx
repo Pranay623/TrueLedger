@@ -1,7 +1,10 @@
+"use client";
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
+import { SessionProvider } from "next-auth/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,10 +16,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "TrueLedger - Blockchain Certificate Verification",
-  description: "Verify, store, and authenticate credentials on the blockchain. Tamper-proof records. Instant verification.",
-};
+// export const metadata: Metadata = {
+//   title: "TrueLedger - Blockchain Certificate Verification",
+//   description: "Verify, store, and authenticate credentials on the blockchain. Tamper-proof records. Instant verification.",
+// };
 
 export default function RootLayout({
   children,
@@ -29,7 +32,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-          {children}
+          <SessionProvider>
+            {children}
+          </SessionProvider>
         </AuthProvider>
       </body>
     </html>

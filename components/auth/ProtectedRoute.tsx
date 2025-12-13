@@ -1,69 +1,50 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { useAuthState } from "@/lib/auth-context"
-import { Loader2 } from "lucide-react"
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { Loader2 } from "lucide-react";
 
 interface ProtectedRouteProps {
-  children: React.ReactNode
-  fallback?: React.ReactNode
-  redirectTo?: string
+  children: React.ReactNode;
+  redirectTo?: string;
 }
 
-export default function ProtectedRoute({ 
-  children, 
-  fallback,
-  redirectTo = "/signin"
+export default function ProtectedRoute({
+  children,
+  redirectTo = "/signin",
 }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading } = useAuthState()
-  const router = useRouter()
+  const { status } = useSession(); // NextAuth
+  const router = useRouter();
+  const [jwtAuthed, setJwtAuthed] = useState<boolean | null>(null);
 
+  // Check JWT cookie
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push(redirectTo)
-    }
-  }, [isAuthenticated, isLoading, router, redirectTo])
+    fetch("/api/auth/check", { credentials: "include" })
+      .then((res) => setJwtAuthed(res.ok))
+      .catch(() => setJwtAuthed(false));
+  }, []);
 
-  if (isLoading) {
+  // ✅ Google / NextAuth login
+  if (status === "authenticated") {
+    return <>{children}</>;
+  }
+
+  // ⏳ Loading
+  if (status === "loading" || jwtAuthed === null) {
     return (
-      fallback || (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
-            <p className="text-gray-600">Loading...</p>
-          </div>
-        </div>
-      )
-    )
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      </div>
+    );
   }
 
-  if (!isAuthenticated) {
-    return null
+  // ✅ Email/password JWT login
+  if (jwtAuthed) {
+    return <>{children}</>;
   }
 
-  return <>{children}</>
-}
-
-export function withAuth<P extends object>(
-  Component: React.ComponentType<P>,
-  options?: {
-    fallback?: React.ReactNode
-    redirectTo?: string
-  }
-) {
-  const WrappedComponent = (props: P) => {
-    return (
-      <ProtectedRoute 
-        fallback={options?.fallback}
-        redirectTo={options?.redirectTo}
-      >
-        <Component {...props} />
-      </ProtectedRoute>
-    )
-  }
-
-  WrappedComponent.displayName = `withAuth(${Component.displayName || Component.name})`
-  
-  return WrappedComponent
+  // ❌ Not authenticated
+  router.replace(redirectTo);
+  return null;
 }

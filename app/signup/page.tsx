@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import { useRouter } from "next/navigation"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Award,
   Shield,
@@ -23,24 +23,23 @@ import {
   Sparkles,
   Lock,
   Mail,
-  Star,
-  Zap,
-  Brain,
   AlertCircle,
   Loader2,
-} from "lucide-react"
-import Link from "next/link"
-import { useAuthForm } from "@/lib/auth-context"
-import { signupSchema, SignupFormData } from "@/lib/auth-types"
-import { isApiError } from "@/lib/auth-api"
+  Brain,
+  Zap
+} from "lucide-react";
+import Link from "next/link";
+import { signupSchema, SignupFormData } from "@/lib/auth-types";
+import { signIn } from "next-auth/react";
 
 export default function SignupPage() {
-  const [showPassword, setShowPassword] = useState(false)
-  const [userType, setUserType] = useState<"INSTITUTION" | "STUDENT">("INSTITUTION")
-  const [error, setError] = useState<string | null>(null)
-  const [agreedToTerms, setAgreedToTerms] = useState(false)
-  const router = useRouter()
-  const { signup, isLoading } = useAuthForm()
+  const [showPassword, setShowPassword] = useState(false);
+  const [userType, setUserType] = useState<"INSTITUTION" | "STUDENT">("INSTITUTION");
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+
+  const router = useRouter();
 
   const {
     register,
@@ -48,8 +47,8 @@ export default function SignupPage() {
     formState: { errors },
     setError: setFormError,
     clearErrors,
-    watch,
-    setValue
+    setValue,
+    watch
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -61,50 +60,61 @@ export default function SignupPage() {
       password: "",
       institutionname: ""
     }
-  })
+  });
 
-  const watchedUsertype = watch("usertype")
+  const watchedUsertype = watch("usertype");
 
   React.useEffect(() => {
-    setValue("usertype", userType)
-  }, [userType, setValue])
+    setValue("usertype", userType);
+  }, [userType, setValue]);
 
-  const togglePasswordVisibility = () => setShowPassword(!showPassword)
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const onSubmit = async (data: SignupFormData) => {
     if (!agreedToTerms) {
-      setError("Please agree to the Terms of Service and Privacy Policy")
-      return
+      setError("Please agree to the Terms of Service and Privacy Policy");
+      return;
     }
 
+    setIsLoading(true);
+    setError(null);
+    clearErrors();
+
     try {
-      setError(null)
-      clearErrors()
-      
-      await signup(data)
-      
-      router.push("/dashboard")
-    } catch (err) {
-      console.error("Signup error:", err)
-      
-      if (isApiError(err)) {
-        if (err.errors && err.errors.length > 0) {
-          err.errors.forEach((e: any) => {
-            if (e.field) {
-              setFormError(e.field as keyof SignupFormData, {
-                type: "server",
-                message: e.message
-              })
-            }
-          })
-        } else {
-          setError(err.message)
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const response = await res.json();
+
+      if (!res.ok) {
+        // show API validation errors
+        if (response.errors) {
+          response.errors.forEach((err: any) => {
+            setFormError(err.field as keyof SignupFormData, {
+              type: "server",
+              message: err.message
+            });
+          });
         }
-      } else {
-        setError("An unexpected error occurred. Please try again.")
+
+        setError(response.message || "Signup failed");
+        setIsLoading(false);
+        return;
       }
+
+      // SUCCESS — user created, cookies set by backend
+      router.push("/dashboard");
+
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong. Try again.");
     }
-  }
+
+    setIsLoading(false);
+  };
 
   return (
     <div className="min-h-screen bg-black text-gray-100 relative">
@@ -290,9 +300,14 @@ export default function SignupPage() {
                 <div className="space-y-3">
                   <Button
                     variant="outline"
-                    className="w-full h-11 text-emerald-300 border border-emerald-800/30 hover:bg-[rgba(16,185,129,0.06)]"
+                    className="w-full h-11 text-emerald-300 border border-emerald-800/30"
                     type="button"
-                  >
+                    onClick={() =>
+                      signIn("google", {
+                        callbackUrl: "/dashboard",
+                      })
+                    }
+>
                     {/* Google SVG */}
                     <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="none" aria-hidden>
                       <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
