@@ -36,15 +36,26 @@ model User {
 }
 
 model Certificate {
-  id          String   @id @default(uuid())
-  name        String
-  issueDate   DateTime
-  imageUrl    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id             String   @id @default(uuid())
+  title          String?
+  description    String?
+  fileUrl        String
+  fileType       String
+  s3Key          String
 
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
+  status         CertificateStatus @default(PENDING)
+  verificationHash String?
 
-  @@map("certificates")
+  ownerId        String
+  owner          User @relation(fields: [ownerId], references: [id])
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+enum CertificateStatus {
+  PENDING
+  VERIFIED
+  APPROVED
+  REJECTED
 }

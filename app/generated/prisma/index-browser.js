@@ -142,12 +142,16 @@ exports.Prisma.UserScalarFieldEnum = {
 
 exports.Prisma.CertificateScalarFieldEnum = {
   id: 'id',
-  name: 'name',
-  issueDate: 'issueDate',
-  imageUrl: 'imageUrl',
+  title: 'title',
+  description: 'description',
+  fileUrl: 'fileUrl',
+  fileType: 'fileType',
+  s3Key: 's3Key',
+  status: 'status',
+  verificationHash: 'verificationHash',
+  ownerId: 'ownerId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  userId: 'userId'
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -167,6 +171,13 @@ exports.Prisma.NullsOrder = {
 exports.Role = exports.$Enums.Role = {
   INSTITUTION: 'INSTITUTION',
   STUDENT: 'STUDENT'
+};
+
+exports.CertificateStatus = exports.$Enums.CertificateStatus = {
+  PENDING: 'PENDING',
+  VERIFIED: 'VERIFIED',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
 };
 
 exports.Prisma.ModelName = {

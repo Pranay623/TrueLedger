@@ -35,11 +35,25 @@ export namespace $Enums {
 
 export type Role = (typeof Role)[keyof typeof Role]
 
+
+export const CertificateStatus: {
+  PENDING: 'PENDING',
+  VERIFIED: 'VERIFIED',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export type CertificateStatus = (typeof CertificateStatus)[keyof typeof CertificateStatus]
+
 }
 
 export type Role = $Enums.Role
 
 export const Role: typeof $Enums.Role
+
+export type CertificateStatus = $Enums.CertificateStatus
+
+export const CertificateStatus: typeof $Enums.CertificateStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -2272,64 +2286,88 @@ export namespace Prisma {
 
   export type CertificateMinAggregateOutputType = {
     id: string | null
-    name: string | null
-    issueDate: Date | null
-    imageUrl: string | null
+    title: string | null
+    description: string | null
+    fileUrl: string | null
+    fileType: string | null
+    s3Key: string | null
+    status: $Enums.CertificateStatus | null
+    verificationHash: string | null
+    ownerId: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    userId: string | null
   }
 
   export type CertificateMaxAggregateOutputType = {
     id: string | null
-    name: string | null
-    issueDate: Date | null
-    imageUrl: string | null
+    title: string | null
+    description: string | null
+    fileUrl: string | null
+    fileType: string | null
+    s3Key: string | null
+    status: $Enums.CertificateStatus | null
+    verificationHash: string | null
+    ownerId: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    userId: string | null
   }
 
   export type CertificateCountAggregateOutputType = {
     id: number
-    name: number
-    issueDate: number
-    imageUrl: number
+    title: number
+    description: number
+    fileUrl: number
+    fileType: number
+    s3Key: number
+    status: number
+    verificationHash: number
+    ownerId: number
     createdAt: number
     updatedAt: number
-    userId: number
     _all: number
   }
 
 
   export type CertificateMinAggregateInputType = {
     id?: true
-    name?: true
-    issueDate?: true
-    imageUrl?: true
+    title?: true
+    description?: true
+    fileUrl?: true
+    fileType?: true
+    s3Key?: true
+    status?: true
+    verificationHash?: true
+    ownerId?: true
     createdAt?: true
     updatedAt?: true
-    userId?: true
   }
 
   export type CertificateMaxAggregateInputType = {
     id?: true
-    name?: true
-    issueDate?: true
-    imageUrl?: true
+    title?: true
+    description?: true
+    fileUrl?: true
+    fileType?: true
+    s3Key?: true
+    status?: true
+    verificationHash?: true
+    ownerId?: true
     createdAt?: true
     updatedAt?: true
-    userId?: true
   }
 
   export type CertificateCountAggregateInputType = {
     id?: true
-    name?: true
-    issueDate?: true
-    imageUrl?: true
+    title?: true
+    description?: true
+    fileUrl?: true
+    fileType?: true
+    s3Key?: true
+    status?: true
+    verificationHash?: true
+    ownerId?: true
     createdAt?: true
     updatedAt?: true
-    userId?: true
     _all?: true
   }
 
@@ -2407,12 +2445,16 @@ export namespace Prisma {
 
   export type CertificateGroupByOutputType = {
     id: string
-    name: string
-    issueDate: Date
-    imageUrl: string
+    title: string | null
+    description: string | null
+    fileUrl: string
+    fileType: string
+    s3Key: string
+    status: $Enums.CertificateStatus
+    verificationHash: string | null
+    ownerId: string
     createdAt: Date
     updatedAt: Date
-    userId: string
     _count: CertificateCountAggregateOutputType | null
     _min: CertificateMinAggregateOutputType | null
     _max: CertificateMaxAggregateOutputType | null
@@ -2434,71 +2476,91 @@ export namespace Prisma {
 
   export type CertificateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    issueDate?: boolean
-    imageUrl?: boolean
+    title?: boolean
+    description?: boolean
+    fileUrl?: boolean
+    fileType?: boolean
+    s3Key?: boolean
+    status?: boolean
+    verificationHash?: boolean
+    ownerId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    userId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["certificate"]>
 
   export type CertificateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    issueDate?: boolean
-    imageUrl?: boolean
+    title?: boolean
+    description?: boolean
+    fileUrl?: boolean
+    fileType?: boolean
+    s3Key?: boolean
+    status?: boolean
+    verificationHash?: boolean
+    ownerId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    userId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["certificate"]>
 
   export type CertificateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    issueDate?: boolean
-    imageUrl?: boolean
+    title?: boolean
+    description?: boolean
+    fileUrl?: boolean
+    fileType?: boolean
+    s3Key?: boolean
+    status?: boolean
+    verificationHash?: boolean
+    ownerId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    userId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["certificate"]>
 
   export type CertificateSelectScalar = {
     id?: boolean
-    name?: boolean
-    issueDate?: boolean
-    imageUrl?: boolean
+    title?: boolean
+    description?: boolean
+    fileUrl?: boolean
+    fileType?: boolean
+    s3Key?: boolean
+    status?: boolean
+    verificationHash?: boolean
+    ownerId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    userId?: boolean
   }
 
-  export type CertificateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "issueDate" | "imageUrl" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["certificate"]>
+  export type CertificateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "fileUrl" | "fileType" | "s3Key" | "status" | "verificationHash" | "ownerId" | "createdAt" | "updatedAt", ExtArgs["result"]["certificate"]>
   export type CertificateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type CertificateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type CertificateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $CertificatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Certificate"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
+      owner: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      name: string
-      issueDate: Date
-      imageUrl: string
+      title: string | null
+      description: string | null
+      fileUrl: string
+      fileType: string
+      s3Key: string
+      status: $Enums.CertificateStatus
+      verificationHash: string | null
+      ownerId: string
       createdAt: Date
       updatedAt: Date
-      userId: string
     }, ExtArgs["result"]["certificate"]>
     composites: {}
   }
@@ -2893,7 +2955,7 @@ export namespace Prisma {
    */
   export interface Prisma__CertificateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2924,12 +2986,16 @@ export namespace Prisma {
    */
   interface CertificateFieldRefs {
     readonly id: FieldRef<"Certificate", 'String'>
-    readonly name: FieldRef<"Certificate", 'String'>
-    readonly issueDate: FieldRef<"Certificate", 'DateTime'>
-    readonly imageUrl: FieldRef<"Certificate", 'String'>
+    readonly title: FieldRef<"Certificate", 'String'>
+    readonly description: FieldRef<"Certificate", 'String'>
+    readonly fileUrl: FieldRef<"Certificate", 'String'>
+    readonly fileType: FieldRef<"Certificate", 'String'>
+    readonly s3Key: FieldRef<"Certificate", 'String'>
+    readonly status: FieldRef<"Certificate", 'CertificateStatus'>
+    readonly verificationHash: FieldRef<"Certificate", 'String'>
+    readonly ownerId: FieldRef<"Certificate", 'String'>
     readonly createdAt: FieldRef<"Certificate", 'DateTime'>
     readonly updatedAt: FieldRef<"Certificate", 'DateTime'>
-    readonly userId: FieldRef<"Certificate", 'String'>
   }
     
 
@@ -3383,12 +3449,16 @@ export namespace Prisma {
 
   export const CertificateScalarFieldEnum: {
     id: 'id',
-    name: 'name',
-    issueDate: 'issueDate',
-    imageUrl: 'imageUrl',
+    title: 'title',
+    description: 'description',
+    fileUrl: 'fileUrl',
+    fileType: 'fileType',
+    s3Key: 's3Key',
+    status: 'status',
+    verificationHash: 'verificationHash',
+    ownerId: 'ownerId',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    userId: 'userId'
+    updatedAt: 'updatedAt'
   };
 
   export type CertificateScalarFieldEnum = (typeof CertificateScalarFieldEnum)[keyof typeof CertificateScalarFieldEnum]
@@ -3483,6 +3553,20 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'CertificateStatus'
+   */
+  export type EnumCertificateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CertificateStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'CertificateStatus[]'
+   */
+  export type ListEnumCertificateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CertificateStatus[]'>
     
 
 
@@ -3625,24 +3709,32 @@ export namespace Prisma {
     OR?: CertificateWhereInput[]
     NOT?: CertificateWhereInput | CertificateWhereInput[]
     id?: StringFilter<"Certificate"> | string
-    name?: StringFilter<"Certificate"> | string
-    issueDate?: DateTimeFilter<"Certificate"> | Date | string
-    imageUrl?: StringFilter<"Certificate"> | string
+    title?: StringNullableFilter<"Certificate"> | string | null
+    description?: StringNullableFilter<"Certificate"> | string | null
+    fileUrl?: StringFilter<"Certificate"> | string
+    fileType?: StringFilter<"Certificate"> | string
+    s3Key?: StringFilter<"Certificate"> | string
+    status?: EnumCertificateStatusFilter<"Certificate"> | $Enums.CertificateStatus
+    verificationHash?: StringNullableFilter<"Certificate"> | string | null
+    ownerId?: StringFilter<"Certificate"> | string
     createdAt?: DateTimeFilter<"Certificate"> | Date | string
     updatedAt?: DateTimeFilter<"Certificate"> | Date | string
-    userId?: StringFilter<"Certificate"> | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type CertificateOrderByWithRelationInput = {
     id?: SortOrder
-    name?: SortOrder
-    issueDate?: SortOrder
-    imageUrl?: SortOrder
+    title?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    fileUrl?: SortOrder
+    fileType?: SortOrder
+    s3Key?: SortOrder
+    status?: SortOrder
+    verificationHash?: SortOrderInput | SortOrder
+    ownerId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
-    user?: UserOrderByWithRelationInput
+    owner?: UserOrderByWithRelationInput
   }
 
   export type CertificateWhereUniqueInput = Prisma.AtLeast<{
@@ -3650,23 +3742,31 @@ export namespace Prisma {
     AND?: CertificateWhereInput | CertificateWhereInput[]
     OR?: CertificateWhereInput[]
     NOT?: CertificateWhereInput | CertificateWhereInput[]
-    name?: StringFilter<"Certificate"> | string
-    issueDate?: DateTimeFilter<"Certificate"> | Date | string
-    imageUrl?: StringFilter<"Certificate"> | string
+    title?: StringNullableFilter<"Certificate"> | string | null
+    description?: StringNullableFilter<"Certificate"> | string | null
+    fileUrl?: StringFilter<"Certificate"> | string
+    fileType?: StringFilter<"Certificate"> | string
+    s3Key?: StringFilter<"Certificate"> | string
+    status?: EnumCertificateStatusFilter<"Certificate"> | $Enums.CertificateStatus
+    verificationHash?: StringNullableFilter<"Certificate"> | string | null
+    ownerId?: StringFilter<"Certificate"> | string
     createdAt?: DateTimeFilter<"Certificate"> | Date | string
     updatedAt?: DateTimeFilter<"Certificate"> | Date | string
-    userId?: StringFilter<"Certificate"> | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
   export type CertificateOrderByWithAggregationInput = {
     id?: SortOrder
-    name?: SortOrder
-    issueDate?: SortOrder
-    imageUrl?: SortOrder
+    title?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    fileUrl?: SortOrder
+    fileType?: SortOrder
+    s3Key?: SortOrder
+    status?: SortOrder
+    verificationHash?: SortOrderInput | SortOrder
+    ownerId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
     _count?: CertificateCountOrderByAggregateInput
     _max?: CertificateMaxOrderByAggregateInput
     _min?: CertificateMinOrderByAggregateInput
@@ -3677,12 +3777,16 @@ export namespace Prisma {
     OR?: CertificateScalarWhereWithAggregatesInput[]
     NOT?: CertificateScalarWhereWithAggregatesInput | CertificateScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Certificate"> | string
-    name?: StringWithAggregatesFilter<"Certificate"> | string
-    issueDate?: DateTimeWithAggregatesFilter<"Certificate"> | Date | string
-    imageUrl?: StringWithAggregatesFilter<"Certificate"> | string
+    title?: StringNullableWithAggregatesFilter<"Certificate"> | string | null
+    description?: StringNullableWithAggregatesFilter<"Certificate"> | string | null
+    fileUrl?: StringWithAggregatesFilter<"Certificate"> | string
+    fileType?: StringWithAggregatesFilter<"Certificate"> | string
+    s3Key?: StringWithAggregatesFilter<"Certificate"> | string
+    status?: EnumCertificateStatusWithAggregatesFilter<"Certificate"> | $Enums.CertificateStatus
+    verificationHash?: StringNullableWithAggregatesFilter<"Certificate"> | string | null
+    ownerId?: StringWithAggregatesFilter<"Certificate"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Certificate"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Certificate"> | Date | string
-    userId?: StringWithAggregatesFilter<"Certificate"> | string
   }
 
   export type UserCreateInput = {
@@ -3703,7 +3807,7 @@ export namespace Prisma {
     lastLogin?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    certificates?: CertificateCreateNestedManyWithoutUserInput
+    certificates?: CertificateCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -3724,7 +3828,7 @@ export namespace Prisma {
     lastLogin?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUpdateInput = {
@@ -3745,7 +3849,7 @@ export namespace Prisma {
     lastLogin?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    certificates?: CertificateUpdateManyWithoutUserNestedInput
+    certificates?: CertificateUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -3766,7 +3870,7 @@ export namespace Prisma {
     lastLogin?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -3831,71 +3935,99 @@ export namespace Prisma {
 
   export type CertificateCreateInput = {
     id?: string
-    name: string
-    issueDate: Date | string
-    imageUrl: string
+    title?: string | null
+    description?: string | null
+    fileUrl: string
+    fileType: string
+    s3Key: string
+    status?: $Enums.CertificateStatus
+    verificationHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutCertificatesInput
+    owner: UserCreateNestedOneWithoutCertificatesInput
   }
 
   export type CertificateUncheckedCreateInput = {
     id?: string
-    name: string
-    issueDate: Date | string
-    imageUrl: string
+    title?: string | null
+    description?: string | null
+    fileUrl: string
+    fileType: string
+    s3Key: string
+    status?: $Enums.CertificateStatus
+    verificationHash?: string | null
+    ownerId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
   }
 
   export type CertificateUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    issueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    imageUrl?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    s3Key?: StringFieldUpdateOperationsInput | string
+    status?: EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
+    verificationHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutCertificatesNestedInput
+    owner?: UserUpdateOneRequiredWithoutCertificatesNestedInput
   }
 
   export type CertificateUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    issueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    imageUrl?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    s3Key?: StringFieldUpdateOperationsInput | string
+    status?: EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
+    verificationHash?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type CertificateCreateManyInput = {
     id?: string
-    name: string
-    issueDate: Date | string
-    imageUrl: string
+    title?: string | null
+    description?: string | null
+    fileUrl: string
+    fileType: string
+    s3Key: string
+    status?: $Enums.CertificateStatus
+    verificationHash?: string | null
+    ownerId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
   }
 
   export type CertificateUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    issueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    imageUrl?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    s3Key?: StringFieldUpdateOperationsInput | string
+    status?: EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
+    verificationHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CertificateUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    issueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    imageUrl?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    s3Key?: StringFieldUpdateOperationsInput | string
+    status?: EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
+    verificationHash?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -4154,6 +4286,13 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type EnumCertificateStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CertificateStatus | EnumCertificateStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CertificateStatus[] | ListEnumCertificateStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CertificateStatus[] | ListEnumCertificateStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCertificateStatusFilter<$PrismaModel> | $Enums.CertificateStatus
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -4161,45 +4300,67 @@ export namespace Prisma {
 
   export type CertificateCountOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    issueDate?: SortOrder
-    imageUrl?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    fileUrl?: SortOrder
+    fileType?: SortOrder
+    s3Key?: SortOrder
+    status?: SortOrder
+    verificationHash?: SortOrder
+    ownerId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
   }
 
   export type CertificateMaxOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    issueDate?: SortOrder
-    imageUrl?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    fileUrl?: SortOrder
+    fileType?: SortOrder
+    s3Key?: SortOrder
+    status?: SortOrder
+    verificationHash?: SortOrder
+    ownerId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
   }
 
   export type CertificateMinOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    issueDate?: SortOrder
-    imageUrl?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    fileUrl?: SortOrder
+    fileType?: SortOrder
+    s3Key?: SortOrder
+    status?: SortOrder
+    verificationHash?: SortOrder
+    ownerId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
   }
 
-  export type CertificateCreateNestedManyWithoutUserInput = {
-    create?: XOR<CertificateCreateWithoutUserInput, CertificateUncheckedCreateWithoutUserInput> | CertificateCreateWithoutUserInput[] | CertificateUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: CertificateCreateOrConnectWithoutUserInput | CertificateCreateOrConnectWithoutUserInput[]
-    createMany?: CertificateCreateManyUserInputEnvelope
+  export type EnumCertificateStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CertificateStatus | EnumCertificateStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CertificateStatus[] | ListEnumCertificateStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CertificateStatus[] | ListEnumCertificateStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCertificateStatusWithAggregatesFilter<$PrismaModel> | $Enums.CertificateStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCertificateStatusFilter<$PrismaModel>
+    _max?: NestedEnumCertificateStatusFilter<$PrismaModel>
+  }
+
+  export type CertificateCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<CertificateCreateWithoutOwnerInput, CertificateUncheckedCreateWithoutOwnerInput> | CertificateCreateWithoutOwnerInput[] | CertificateUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: CertificateCreateOrConnectWithoutOwnerInput | CertificateCreateOrConnectWithoutOwnerInput[]
+    createMany?: CertificateCreateManyOwnerInputEnvelope
     connect?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
   }
 
-  export type CertificateUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<CertificateCreateWithoutUserInput, CertificateUncheckedCreateWithoutUserInput> | CertificateCreateWithoutUserInput[] | CertificateUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: CertificateCreateOrConnectWithoutUserInput | CertificateCreateOrConnectWithoutUserInput[]
-    createMany?: CertificateCreateManyUserInputEnvelope
+  export type CertificateUncheckedCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<CertificateCreateWithoutOwnerInput, CertificateUncheckedCreateWithoutOwnerInput> | CertificateCreateWithoutOwnerInput[] | CertificateUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: CertificateCreateOrConnectWithoutOwnerInput | CertificateCreateOrConnectWithoutOwnerInput[]
+    createMany?: CertificateCreateManyOwnerInputEnvelope
     connect?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
   }
 
@@ -4235,31 +4396,31 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type CertificateUpdateManyWithoutUserNestedInput = {
-    create?: XOR<CertificateCreateWithoutUserInput, CertificateUncheckedCreateWithoutUserInput> | CertificateCreateWithoutUserInput[] | CertificateUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: CertificateCreateOrConnectWithoutUserInput | CertificateCreateOrConnectWithoutUserInput[]
-    upsert?: CertificateUpsertWithWhereUniqueWithoutUserInput | CertificateUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: CertificateCreateManyUserInputEnvelope
+  export type CertificateUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<CertificateCreateWithoutOwnerInput, CertificateUncheckedCreateWithoutOwnerInput> | CertificateCreateWithoutOwnerInput[] | CertificateUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: CertificateCreateOrConnectWithoutOwnerInput | CertificateCreateOrConnectWithoutOwnerInput[]
+    upsert?: CertificateUpsertWithWhereUniqueWithoutOwnerInput | CertificateUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: CertificateCreateManyOwnerInputEnvelope
     set?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
     disconnect?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
     delete?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
     connect?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
-    update?: CertificateUpdateWithWhereUniqueWithoutUserInput | CertificateUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: CertificateUpdateManyWithWhereWithoutUserInput | CertificateUpdateManyWithWhereWithoutUserInput[]
+    update?: CertificateUpdateWithWhereUniqueWithoutOwnerInput | CertificateUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: CertificateUpdateManyWithWhereWithoutOwnerInput | CertificateUpdateManyWithWhereWithoutOwnerInput[]
     deleteMany?: CertificateScalarWhereInput | CertificateScalarWhereInput[]
   }
 
-  export type CertificateUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<CertificateCreateWithoutUserInput, CertificateUncheckedCreateWithoutUserInput> | CertificateCreateWithoutUserInput[] | CertificateUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: CertificateCreateOrConnectWithoutUserInput | CertificateCreateOrConnectWithoutUserInput[]
-    upsert?: CertificateUpsertWithWhereUniqueWithoutUserInput | CertificateUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: CertificateCreateManyUserInputEnvelope
+  export type CertificateUncheckedUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<CertificateCreateWithoutOwnerInput, CertificateUncheckedCreateWithoutOwnerInput> | CertificateCreateWithoutOwnerInput[] | CertificateUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: CertificateCreateOrConnectWithoutOwnerInput | CertificateCreateOrConnectWithoutOwnerInput[]
+    upsert?: CertificateUpsertWithWhereUniqueWithoutOwnerInput | CertificateUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: CertificateCreateManyOwnerInputEnvelope
     set?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
     disconnect?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
     delete?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
     connect?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
-    update?: CertificateUpdateWithWhereUniqueWithoutUserInput | CertificateUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: CertificateUpdateManyWithWhereWithoutUserInput | CertificateUpdateManyWithWhereWithoutUserInput[]
+    update?: CertificateUpdateWithWhereUniqueWithoutOwnerInput | CertificateUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: CertificateUpdateManyWithWhereWithoutOwnerInput | CertificateUpdateManyWithWhereWithoutOwnerInput[]
     deleteMany?: CertificateScalarWhereInput | CertificateScalarWhereInput[]
   }
 
@@ -4267,6 +4428,10 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutCertificatesInput, UserUncheckedCreateWithoutCertificatesInput>
     connectOrCreate?: UserCreateOrConnectWithoutCertificatesInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type EnumCertificateStatusFieldUpdateOperationsInput = {
+    set?: $Enums.CertificateStatus
   }
 
   export type UserUpdateOneRequiredWithoutCertificatesNestedInput = {
@@ -4468,48 +4633,73 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type CertificateCreateWithoutUserInput = {
+  export type NestedEnumCertificateStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CertificateStatus | EnumCertificateStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CertificateStatus[] | ListEnumCertificateStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CertificateStatus[] | ListEnumCertificateStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCertificateStatusFilter<$PrismaModel> | $Enums.CertificateStatus
+  }
+
+  export type NestedEnumCertificateStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CertificateStatus | EnumCertificateStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CertificateStatus[] | ListEnumCertificateStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CertificateStatus[] | ListEnumCertificateStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCertificateStatusWithAggregatesFilter<$PrismaModel> | $Enums.CertificateStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCertificateStatusFilter<$PrismaModel>
+    _max?: NestedEnumCertificateStatusFilter<$PrismaModel>
+  }
+
+  export type CertificateCreateWithoutOwnerInput = {
     id?: string
-    name: string
-    issueDate: Date | string
-    imageUrl: string
+    title?: string | null
+    description?: string | null
+    fileUrl: string
+    fileType: string
+    s3Key: string
+    status?: $Enums.CertificateStatus
+    verificationHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type CertificateUncheckedCreateWithoutUserInput = {
+  export type CertificateUncheckedCreateWithoutOwnerInput = {
     id?: string
-    name: string
-    issueDate: Date | string
-    imageUrl: string
+    title?: string | null
+    description?: string | null
+    fileUrl: string
+    fileType: string
+    s3Key: string
+    status?: $Enums.CertificateStatus
+    verificationHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type CertificateCreateOrConnectWithoutUserInput = {
+  export type CertificateCreateOrConnectWithoutOwnerInput = {
     where: CertificateWhereUniqueInput
-    create: XOR<CertificateCreateWithoutUserInput, CertificateUncheckedCreateWithoutUserInput>
+    create: XOR<CertificateCreateWithoutOwnerInput, CertificateUncheckedCreateWithoutOwnerInput>
   }
 
-  export type CertificateCreateManyUserInputEnvelope = {
-    data: CertificateCreateManyUserInput | CertificateCreateManyUserInput[]
+  export type CertificateCreateManyOwnerInputEnvelope = {
+    data: CertificateCreateManyOwnerInput | CertificateCreateManyOwnerInput[]
     skipDuplicates?: boolean
   }
 
-  export type CertificateUpsertWithWhereUniqueWithoutUserInput = {
+  export type CertificateUpsertWithWhereUniqueWithoutOwnerInput = {
     where: CertificateWhereUniqueInput
-    update: XOR<CertificateUpdateWithoutUserInput, CertificateUncheckedUpdateWithoutUserInput>
-    create: XOR<CertificateCreateWithoutUserInput, CertificateUncheckedCreateWithoutUserInput>
+    update: XOR<CertificateUpdateWithoutOwnerInput, CertificateUncheckedUpdateWithoutOwnerInput>
+    create: XOR<CertificateCreateWithoutOwnerInput, CertificateUncheckedCreateWithoutOwnerInput>
   }
 
-  export type CertificateUpdateWithWhereUniqueWithoutUserInput = {
+  export type CertificateUpdateWithWhereUniqueWithoutOwnerInput = {
     where: CertificateWhereUniqueInput
-    data: XOR<CertificateUpdateWithoutUserInput, CertificateUncheckedUpdateWithoutUserInput>
+    data: XOR<CertificateUpdateWithoutOwnerInput, CertificateUncheckedUpdateWithoutOwnerInput>
   }
 
-  export type CertificateUpdateManyWithWhereWithoutUserInput = {
+  export type CertificateUpdateManyWithWhereWithoutOwnerInput = {
     where: CertificateScalarWhereInput
-    data: XOR<CertificateUpdateManyMutationInput, CertificateUncheckedUpdateManyWithoutUserInput>
+    data: XOR<CertificateUpdateManyMutationInput, CertificateUncheckedUpdateManyWithoutOwnerInput>
   }
 
   export type CertificateScalarWhereInput = {
@@ -4517,12 +4707,16 @@ export namespace Prisma {
     OR?: CertificateScalarWhereInput[]
     NOT?: CertificateScalarWhereInput | CertificateScalarWhereInput[]
     id?: StringFilter<"Certificate"> | string
-    name?: StringFilter<"Certificate"> | string
-    issueDate?: DateTimeFilter<"Certificate"> | Date | string
-    imageUrl?: StringFilter<"Certificate"> | string
+    title?: StringNullableFilter<"Certificate"> | string | null
+    description?: StringNullableFilter<"Certificate"> | string | null
+    fileUrl?: StringFilter<"Certificate"> | string
+    fileType?: StringFilter<"Certificate"> | string
+    s3Key?: StringFilter<"Certificate"> | string
+    status?: EnumCertificateStatusFilter<"Certificate"> | $Enums.CertificateStatus
+    verificationHash?: StringNullableFilter<"Certificate"> | string | null
+    ownerId?: StringFilter<"Certificate"> | string
     createdAt?: DateTimeFilter<"Certificate"> | Date | string
     updatedAt?: DateTimeFilter<"Certificate"> | Date | string
-    userId?: StringFilter<"Certificate"> | string
   }
 
   export type UserCreateWithoutCertificatesInput = {
@@ -4621,38 +4815,54 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type CertificateCreateManyUserInput = {
+  export type CertificateCreateManyOwnerInput = {
     id?: string
-    name: string
-    issueDate: Date | string
-    imageUrl: string
+    title?: string | null
+    description?: string | null
+    fileUrl: string
+    fileType: string
+    s3Key: string
+    status?: $Enums.CertificateStatus
+    verificationHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type CertificateUpdateWithoutUserInput = {
+  export type CertificateUpdateWithoutOwnerInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    issueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    imageUrl?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    s3Key?: StringFieldUpdateOperationsInput | string
+    status?: EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
+    verificationHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type CertificateUncheckedUpdateWithoutUserInput = {
+  export type CertificateUncheckedUpdateWithoutOwnerInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    issueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    imageUrl?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    s3Key?: StringFieldUpdateOperationsInput | string
+    status?: EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
+    verificationHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type CertificateUncheckedUpdateManyWithoutUserInput = {
+  export type CertificateUncheckedUpdateManyWithoutOwnerInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    issueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    imageUrl?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    s3Key?: StringFieldUpdateOperationsInput | string
+    status?: EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
+    verificationHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

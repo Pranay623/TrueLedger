@@ -115,12 +115,16 @@ exports.Prisma.UserScalarFieldEnum = {
 
 exports.Prisma.CertificateScalarFieldEnum = {
   id: 'id',
-  name: 'name',
-  issueDate: 'issueDate',
-  imageUrl: 'imageUrl',
+  title: 'title',
+  description: 'description',
+  fileUrl: 'fileUrl',
+  fileType: 'fileType',
+  s3Key: 's3Key',
+  status: 'status',
+  verificationHash: 'verificationHash',
+  ownerId: 'ownerId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  userId: 'userId'
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -142,6 +146,13 @@ exports.Role = exports.$Enums.Role = {
   STUDENT: 'STUDENT'
 };
 
+exports.CertificateStatus = exports.$Enums.CertificateStatus = {
+  PENDING: 'PENDING',
+  VERIFIED: 'VERIFIED',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Certificate: 'Certificate'
@@ -154,10 +165,10 @@ const config = {
   "clientVersion": "7.1.0",
   "engineVersion": "ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nenum Role {\n  INSTITUTION\n  STUDENT\n}\n\nmodel User {\n  id                  String    @id @default(uuid())\n  email               String    @unique\n  username            String    @unique\n  password            String\n  fullName            String?\n  securityId          String    @unique\n  admin               Boolean   @default(false)\n  avatar              String?\n  usertype            Role      @default(STUDENT)\n  institutionname     String?\n  refreshToken        String?\n  failedLoginAttempts Int       @default(0)\n  accountLocked       Boolean   @default(false)\n  lockExpiresAt       DateTime?\n  lastLogin           DateTime  @default(now())\n  createdAt           DateTime  @default(now())\n  updatedAt           DateTime  @updatedAt\n\n  certificates Certificate[]\n\n  @@map(\"users\")\n}\n\nmodel Certificate {\n  id        String   @id @default(uuid())\n  name      String\n  issueDate DateTime\n  imageUrl  String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  userId String\n  user   User   @relation(fields: [userId], references: [id])\n\n  @@map(\"certificates\")\n}\n"
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nenum Role {\n  INSTITUTION\n  STUDENT\n}\n\nmodel User {\n  id                  String    @id @default(uuid())\n  email               String    @unique\n  username            String    @unique\n  password            String\n  fullName            String?\n  securityId          String    @unique\n  admin               Boolean   @default(false)\n  avatar              String?\n  usertype            Role      @default(STUDENT)\n  institutionname     String?\n  refreshToken        String?\n  failedLoginAttempts Int       @default(0)\n  accountLocked       Boolean   @default(false)\n  lockExpiresAt       DateTime?\n  lastLogin           DateTime  @default(now())\n  createdAt           DateTime  @default(now())\n  updatedAt           DateTime  @updatedAt\n\n  certificates Certificate[]\n\n  @@map(\"users\")\n}\n\nmodel Certificate {\n  id          String  @id @default(uuid())\n  title       String?\n  description String?\n  fileUrl     String\n  fileType    String\n  s3Key       String\n\n  status           CertificateStatus @default(PENDING)\n  verificationHash String?\n\n  ownerId String\n  owner   User   @relation(fields: [ownerId], references: [id])\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nenum CertificateStatus {\n  PENDING\n  VERIFIED\n  APPROVED\n  REJECTED\n}\n"
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fullName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"securityId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"admin\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"avatar\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"usertype\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"institutionname\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"refreshToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"failedLoginAttempts\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"accountLocked\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"lockExpiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"lastLogin\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"certificates\",\"kind\":\"object\",\"type\":\"Certificate\",\"relationName\":\"CertificateToUser\"}],\"dbName\":\"users\"},\"Certificate\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"issueDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"imageUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"CertificateToUser\"}],\"dbName\":\"certificates\"}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fullName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"securityId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"admin\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"avatar\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"usertype\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"institutionname\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"refreshToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"failedLoginAttempts\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"accountLocked\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"lockExpiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"lastLogin\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"certificates\",\"kind\":\"object\",\"type\":\"Certificate\",\"relationName\":\"CertificateToUser\"}],\"dbName\":\"users\"},\"Certificate\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fileUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fileType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"s3Key\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"CertificateStatus\"},{\"name\":\"verificationHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ownerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"owner\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"CertificateToUser\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.compilerWasm = {
       getRuntime: async () => require('./query_compiler_bg.js'),
