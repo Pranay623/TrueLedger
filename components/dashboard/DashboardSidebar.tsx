@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -26,9 +26,9 @@ interface SidebarProps {
   className?: string;
 }
 
-const navigationItems = [
+const navigationItemsBase = [
   { title: "Overview", href: "/dashboard", icon: Home },
-  { title: "Certificates", href: "/dashboard/certificates", icon: Award, badge: "124" },
+  { title: "Certificates", href: "/dashboard/certificates", icon: Award },
   { title: "Upload", href: "/dashboard/upload", icon: Upload },
   { title: "Verify", href: "/dashboard/verify", icon: Shield },
   { title: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
@@ -38,13 +38,38 @@ const navigationItems = [
 ];
 
 const bottomItems = [
+  { title: "Profile", href: "/dashboard/profile", icon: Users },
   { title: "Settings", href: "/dashboard/settings", icon: Settings },
   { title: "Help", href: "/dashboard/help", icon: HelpCircle },
 ];
 
 export default function DashboardSidebar({ className }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [certificateCount, setCertificateCount] = useState<string | null>(null);
   const pathname = usePathname();
+
+  // Fetch certificate count
+  useEffect(() => {
+    async function fetchCertificateCount() {
+      try {
+        const res = await fetch("/api/certificates?page=1&limit=1");
+        if (res.ok) {
+          const data = await res.json();
+          setCertificateCount(data.total?.toString() ?? null);
+        }
+      } catch (e) {
+        setCertificateCount(null);
+      }
+    }
+    fetchCertificateCount();
+  }, []);
+
+  // Inject dynamic badge for certificates
+  const navigationItems = navigationItemsBase.map((item) =>
+    item.title === "Certificates"
+      ? { ...item, badge: certificateCount ?? undefined }
+      : item
+  );
 
   return (
     <aside

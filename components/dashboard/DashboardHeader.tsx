@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthState, useAuthActions } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
@@ -36,8 +36,15 @@ interface DashboardHeaderProps {
   description?: string;
 }
 
-export default function DashboardHeader({ title, description }: DashboardHeaderProps) {
+export default function DashboardHeader({
+  title,
+  description,
+}: DashboardHeaderProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [loadingNotifications, setLoadingNotifications] = useState(false);
+
   const { user } = useAuthState();
   const { signout } = useAuthActions();
   const router = useRouter();
@@ -49,6 +56,44 @@ export default function DashboardHeader({ title, description }: DashboardHeaderP
 
   const getUserInitials = (email: string) =>
     email.split("@")[0].substring(0, 2).toUpperCase();
+
+  /* ---------------- Notifications ---------------- */
+
+  const fetchNotifications = async () => {
+    try {
+      setLoadingNotifications(true);
+      const res = await fetch("/api/notifications", {
+        credentials: "include",
+      });
+      if (!res.ok) return;
+
+      const data = await res.json();
+      setNotifications(data.notifications || []);
+      setUnreadCount(data.unreadCount || 0);
+    } catch (err) {
+      console.error("Failed to fetch notifications", err);
+    } finally {
+      setLoadingNotifications(false);
+    }
+  };
+
+  const markAllRead = async () => {
+    try {
+      await fetch("/api/notifications/read", {
+        method: "PATCH",
+        credentials: "include",
+      });
+      fetchNotifications();
+    } catch (err) {
+      console.error("Failed to mark notifications as read", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  /* ---------------- UI ---------------- */
 
   return (
     <header className="sticky top-0 z-40 bg-black/60 backdrop-blur-xl border-b border-emerald-900/20">
@@ -62,14 +107,20 @@ export default function DashboardHeader({ title, description }: DashboardHeaderP
                 {title}
               </h1>
               {description && (
-                <p className="text-sm text-gray-400 mt-1">{description}</p>
+                <p className="text-sm text-gray-400 mt-1">
+                  {description}
+                </p>
               )}
             </>
           ) : (
             <div className="flex items-center gap-2 text-gray-400">
               <Command className="w-4 h-4" />
               <span className="text-sm">
-                Press <kbd className="px-2 py-1 bg-gray-900 border border-gray-800 rounded text-xs">⌘K</kbd> to search
+                Press{" "}
+                <kbd className="px-2 py-1 bg-gray-900 border border-gray-800 rounded text-xs">
+                  ⌘K
+                </kbd>{" "}
+                to search
               </span>
             </div>
           )}
@@ -116,39 +167,66 @@ export default function DashboardHeader({ title, description }: DashboardHeaderP
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="relative">
                 <Bell className="w-5 h-5 text-gray-400" />
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 text-xs flex items-center justify-center bg-red-600 text-white">
-                  3
-                </Badge>
+                {unreadCount > 0 && (
+                  <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 text-xs flex items-center justify-center bg-red-600 text-white">
+                    {unreadCount}
+                  </Badge>
+                )}
               </Button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end" className="w-80 bg-black/90 border border-gray-800 text-gray-200">
+            <DropdownMenuContent
+              align="end"
+              className="w-80 bg-black/90 border border-gray-800 text-gray-200"
+            >
               <DropdownMenuLabel className="flex justify-between">
                 Notifications
-                <Badge className="bg-emerald-900/20 text-emerald-300 text-xs">
-                  3 new
-                </Badge>
+                {unreadCount > 0 && (
+                  <Badge className="bg-emerald-900/20 text-emerald-300 text-xs">
+                    {unreadCount} new
+                  </Badge>
+                )}
               </DropdownMenuLabel>
+
               <DropdownMenuSeparator />
 
-              {[
-                ["New certificate uploaded", "John Doe submitted a certificate", "2 min ago", "bg-emerald-500"],
-                ["Verification completed", "Certificate verified", "5 min ago", "bg-green-500"],
-                ["Storage warning", "85% storage used", "1 hour ago", "bg-orange-500"],
-              ].map(([title, desc, time, color], i) => (
-                <div key={i} className="flex gap-3 p-3 hover:bg-gray-900 rounded-lg cursor-pointer">
-                  <div className={`w-2 h-2 rounded-full mt-2 ${color}`} />
-                  <div className="flex-1">
-                    <p className="text-sm font-medium">{title}</p>
-                    <p className="text-xs text-gray-400">{desc}</p>
-                    <p className="text-xs text-gray-500 mt-1">{time}</p>
+              {loadingNotifications ? (
+                <p className="text-sm text-gray-500 px-3 py-4">
+                  Loading…
+                </p>
+              ) : notifications.length === 0 ? (
+                <p className="text-sm text-gray-500 px-3 py-4">
+                  No notifications
+                </p>
+              ) : (
+                notifications.map((n, i) => (
+                  <div
+                    key={i}
+                    className="flex gap-3 p-3 hover:bg-gray-900 rounded-lg cursor-pointer"
+                  >
+                    <div
+                      className={`w-2 h-2 rounded-full mt-2 ${
+                        n.read ? "bg-gray-500" : "bg-emerald-500"
+                      }`}
+                    />
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">{n.title}</p>
+                      <p className="text-xs text-gray-400">{n.message}</p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {new Date(n.createdAt).toLocaleString()}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
 
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="justify-center text-emerald-400 cursor-pointer">
-                View all notifications
+
+              <DropdownMenuItem
+                className="justify-center text-emerald-400 cursor-pointer"
+                onClick={markAllRead}
+              >
+                Mark all as read
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -166,19 +244,33 @@ export default function DashboardHeader({ title, description }: DashboardHeaderP
               </Button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end" className="w-56 bg-black/90 border border-gray-800 text-gray-200">
+            <DropdownMenuContent
+              align="end"
+              className="w-56 bg-black/90 border border-gray-800 text-gray-200"
+            >
               <DropdownMenuLabel>
                 <p className="text-sm font-medium">{user?.username}</p>
                 <p className="text-xs text-gray-400">{user?.email}</p>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem><User className="mr-2 h-4 w-4" /> Profile</DropdownMenuItem>
-              <DropdownMenuItem><Settings className="mr-2 h-4 w-4" /> Settings</DropdownMenuItem>
-              <DropdownMenuItem><HelpCircle className="mr-2 h-4 w-4" /> Help</DropdownMenuItem>
 
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleSignout} className="text-red-400">
+
+              <DropdownMenuItem onClick={() => router.push("/dashboard/profile") }>
+                <User className="mr-2 h-4 w-4" /> Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/dashboard/settings") }>
+                <Settings className="mr-2 h-4 w-4" /> Settings
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/dashboard/help") }>
+                <HelpCircle className="mr-2 h-4 w-4" /> Help
+              </DropdownMenuItem>
+
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem
+                onClick={handleSignout}
+                className="text-red-400"
+              >
                 <LogOut className="mr-2 h-4 w-4" /> Sign out
               </DropdownMenuItem>
             </DropdownMenuContent>
