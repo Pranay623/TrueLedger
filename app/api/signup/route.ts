@@ -4,7 +4,7 @@ import { Role } from "@/app/generated/prisma";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import { signupSchema, AuthResponse } from "@/app/lib/auth-types";
+import { signupSchema } from "@/app/lib/auth-types";
 import { serialize } from "cookie";
 
 const JWT_SECRET = process.env.JWT_SECRET ?? "fallback-secret";
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    // Validate with Zod
+    // 1️⃣ Validate input
     const validation = signupSchema.safeParse(body);
     if (!validation.success) {
       return NextResponse.json(
@@ -29,10 +29,17 @@ export async function POST(req: Request) {
       );
     }
 
-    const { firstname, lastname, email, username, password, usertype, institutionname } =
-      validation.data;
+    const {
+      firstname,
+      lastname,
+      email,
+      username,
+      password,
+      usertype,
+      institutionname,
+    } = validation.data;
 
-    // Check email
+    // 2️⃣ Check email
     const emailExists = await prisma.user.findUnique({ where: { email } });
     if (emailExists) {
       return NextResponse.json(
@@ -44,8 +51,10 @@ export async function POST(req: Request) {
       );
     }
 
-    // Check username
-    const usernameExists = await prisma.user.findUnique({ where: { username } });
+    // 3️⃣ Check username
+    const usernameExists = await prisma.user.findUnique({
+      where: { username },
+    });
     if (usernameExists) {
       return NextResponse.json(
         {
@@ -56,9 +65,29 @@ export async function POST(req: Request) {
       );
     }
 
+    // 4️⃣ Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
     const securityId = crypto.randomUUID();
 
+    // 5️⃣ 🔐 CHECK IF ADMIN SHOULD BE CREATED
+    let isAdmin = false;
+
+    if (usertype === "INSTITUTION" && institutionname) {
+      const existingAdmin = await prisma.user.findFirst({
+        where: {
+          usertype: "INSTITUTION",
+          institutionname,
+          admin: true,
+        },
+      });
+
+      // First institution user becomes admin
+      if (!existingAdmin) {
+        isAdmin = true;
+      }
+    }
+
+    // 6️⃣ Create user
     const newUser = await prisma.user.create({
       data: {
         fullName: `${firstname} ${lastname}`,
@@ -68,11 +97,17 @@ export async function POST(req: Request) {
         securityId,
         usertype: usertype as Role,
         institutionname: usertype === "INSTITUTION" ? institutionname : null,
+        admin: isAdmin,
       },
     });
 
+    // 7️⃣ Tokens
     const token = jwt.sign(
-      { userId: newUser.id, email: newUser.email, username: newUser.username },
+      {
+        userId: newUser.id,
+        email: newUser.email,
+        username: newUser.username,
+      },
       JWT_SECRET,
       { expiresIn: "15m" }
     );
@@ -83,27 +118,28 @@ export async function POST(req: Request) {
       { expiresIn: "7d" }
     );
 
+    // 8️⃣ Response
     const response = NextResponse.json(
       {
         message: "User created successfully",
-        token,
-        refreshToken,
         user: {
           id: newUser.id,
           email: newUser.email,
           username: newUser.username,
+          admin: newUser.admin,
         },
       },
       { status: 201 }
     );
 
-    // Cookies
+    // 9️⃣ Cookies
     response.headers.append(
       "Set-Cookie",
       serialize("accessToken", token, {
         httpOnly: true,
         path: "/",
         maxAge: 900,
+        sameSite: "strict",
       })
     );
 
@@ -113,6 +149,7 @@ export async function POST(req: Request) {
         httpOnly: true,
         path: "/",
         maxAge: 7 * 24 * 60 * 60,
+        sameSite: "strict",
       })
     );
 
@@ -120,7 +157,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("Signup Error:", error);
     return NextResponse.json(
-      { message: "Internal Server Error", status: 500 },
+      { message: "Internal Server Error" },
       { status: 500 }
     );
   }
