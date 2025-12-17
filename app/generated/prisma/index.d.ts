@@ -23,6 +23,11 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  * 
  */
 export type Certificate = $Result.DefaultSelection<Prisma.$CertificatePayload>
+/**
+ * Model CertificateLog
+ * 
+ */
+export type CertificateLog = $Result.DefaultSelection<Prisma.$CertificateLogPayload>
 
 /**
  * Enums
@@ -191,6 +196,16 @@ export class PrismaClient<
     * ```
     */
   get certificate(): Prisma.CertificateDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.certificateLog`: Exposes CRUD operations for the **CertificateLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CertificateLogs
+    * const certificateLogs = await prisma.certificateLog.findMany()
+    * ```
+    */
+  get certificateLog(): Prisma.CertificateLogDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -626,7 +641,8 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
-    Certificate: 'Certificate'
+    Certificate: 'Certificate',
+    CertificateLog: 'CertificateLog'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -642,7 +658,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "certificate"
+      modelProps: "user" | "certificate" | "certificateLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -794,6 +810,80 @@ export namespace Prisma {
           }
         }
       }
+      CertificateLog: {
+        payload: Prisma.$CertificateLogPayload<ExtArgs>
+        fields: Prisma.CertificateLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CertificateLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CertificateLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateLogPayload>
+          }
+          findFirst: {
+            args: Prisma.CertificateLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CertificateLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateLogPayload>
+          }
+          findMany: {
+            args: Prisma.CertificateLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateLogPayload>[]
+          }
+          create: {
+            args: Prisma.CertificateLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateLogPayload>
+          }
+          createMany: {
+            args: Prisma.CertificateLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CertificateLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateLogPayload>[]
+          }
+          delete: {
+            args: Prisma.CertificateLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateLogPayload>
+          }
+          update: {
+            args: Prisma.CertificateLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.CertificateLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CertificateLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CertificateLogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateLogPayload>[]
+          }
+          upsert: {
+            args: Prisma.CertificateLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateLogPayload>
+          }
+          aggregate: {
+            args: Prisma.CertificateLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCertificateLog>
+          }
+          groupBy: {
+            args: Prisma.CertificateLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CertificateLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CertificateLogCountArgs<ExtArgs>
+            result: $Utils.Optional<CertificateLogCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -904,6 +994,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     user?: UserOmit
     certificate?: CertificateOmit
+    certificateLog?: CertificateLogOmit
   }
 
   /* Types for Logging */
@@ -985,10 +1076,12 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     certificates: number
+    performedLogs: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     certificates?: boolean | UserCountOutputTypeCountCertificatesArgs
+    performedLogs?: boolean | UserCountOutputTypeCountPerformedLogsArgs
   }
 
   // Custom InputTypes
@@ -1007,6 +1100,44 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountCertificatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CertificateWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPerformedLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CertificateLogWhereInput
+  }
+
+
+  /**
+   * Count Type CertificateCountOutputType
+   */
+
+  export type CertificateCountOutputType = {
+    logs: number
+  }
+
+  export type CertificateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    logs?: boolean | CertificateCountOutputTypeCountLogsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CertificateCountOutputType without action
+   */
+  export type CertificateCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateCountOutputType
+     */
+    select?: CertificateCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CertificateCountOutputType without action
+   */
+  export type CertificateCountOutputTypeCountLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CertificateLogWhereInput
   }
 
 
@@ -1309,6 +1440,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     certificates?: boolean | User$certificatesArgs<ExtArgs>
+    performedLogs?: boolean | User$performedLogsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1375,6 +1507,7 @@ export namespace Prisma {
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "username" | "password" | "fullName" | "securityId" | "admin" | "avatar" | "usertype" | "institutionname" | "refreshToken" | "failedLoginAttempts" | "accountLocked" | "lockExpiresAt" | "lastLogin" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     certificates?: boolean | User$certificatesArgs<ExtArgs>
+    performedLogs?: boolean | User$performedLogsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1384,6 +1517,7 @@ export namespace Prisma {
     name: "User"
     objects: {
       certificates: Prisma.$CertificatePayload<ExtArgs>[]
+      performedLogs: Prisma.$CertificateLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1798,6 +1932,7 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     certificates<T extends User$certificatesArgs<ExtArgs> = {}>(args?: Subset<T, User$certificatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    performedLogs<T extends User$performedLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$performedLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2256,6 +2391,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.performedLogs
+   */
+  export type User$performedLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateLog
+     */
+    select?: CertificateLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateLog
+     */
+    omit?: CertificateLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateLogInclude<ExtArgs> | null
+    where?: CertificateLogWhereInput
+    orderBy?: CertificateLogOrderByWithRelationInput | CertificateLogOrderByWithRelationInput[]
+    cursor?: CertificateLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CertificateLogScalarFieldEnum | CertificateLogScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2487,6 +2646,8 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     owner?: boolean | UserDefaultArgs<ExtArgs>
+    logs?: boolean | Certificate$logsArgs<ExtArgs>
+    _count?: boolean | CertificateCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["certificate"]>
 
   export type CertificateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2536,6 +2697,8 @@ export namespace Prisma {
   export type CertificateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "fileUrl" | "fileType" | "s3Key" | "status" | "verificationHash" | "ownerId" | "createdAt" | "updatedAt", ExtArgs["result"]["certificate"]>
   export type CertificateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     owner?: boolean | UserDefaultArgs<ExtArgs>
+    logs?: boolean | Certificate$logsArgs<ExtArgs>
+    _count?: boolean | CertificateCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CertificateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     owner?: boolean | UserDefaultArgs<ExtArgs>
@@ -2548,6 +2711,7 @@ export namespace Prisma {
     name: "Certificate"
     objects: {
       owner: Prisma.$UserPayload<ExtArgs>
+      logs: Prisma.$CertificateLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2956,6 +3120,7 @@ export namespace Prisma {
   export interface Prisma__CertificateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    logs<T extends Certificate$logsArgs<ExtArgs> = {}>(args?: Subset<T, Certificate$logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3392,6 +3557,30 @@ export namespace Prisma {
   }
 
   /**
+   * Certificate.logs
+   */
+  export type Certificate$logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateLog
+     */
+    select?: CertificateLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateLog
+     */
+    omit?: CertificateLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateLogInclude<ExtArgs> | null
+    where?: CertificateLogWhereInput
+    orderBy?: CertificateLogOrderByWithRelationInput | CertificateLogOrderByWithRelationInput[]
+    cursor?: CertificateLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CertificateLogScalarFieldEnum | CertificateLogScalarFieldEnum[]
+  }
+
+  /**
    * Certificate without action
    */
   export type CertificateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3407,6 +3596,1081 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CertificateLog
+   */
+
+  export type AggregateCertificateLog = {
+    _count: CertificateLogCountAggregateOutputType | null
+    _min: CertificateLogMinAggregateOutputType | null
+    _max: CertificateLogMaxAggregateOutputType | null
+  }
+
+  export type CertificateLogMinAggregateOutputType = {
+    id: string | null
+    certificateId: string | null
+    action: string | null
+    performedById: string | null
+    createdAt: Date | null
+  }
+
+  export type CertificateLogMaxAggregateOutputType = {
+    id: string | null
+    certificateId: string | null
+    action: string | null
+    performedById: string | null
+    createdAt: Date | null
+  }
+
+  export type CertificateLogCountAggregateOutputType = {
+    id: number
+    certificateId: number
+    action: number
+    performedById: number
+    metadata: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type CertificateLogMinAggregateInputType = {
+    id?: true
+    certificateId?: true
+    action?: true
+    performedById?: true
+    createdAt?: true
+  }
+
+  export type CertificateLogMaxAggregateInputType = {
+    id?: true
+    certificateId?: true
+    action?: true
+    performedById?: true
+    createdAt?: true
+  }
+
+  export type CertificateLogCountAggregateInputType = {
+    id?: true
+    certificateId?: true
+    action?: true
+    performedById?: true
+    metadata?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type CertificateLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CertificateLog to aggregate.
+     */
+    where?: CertificateLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateLogs to fetch.
+     */
+    orderBy?: CertificateLogOrderByWithRelationInput | CertificateLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CertificateLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CertificateLogs
+    **/
+    _count?: true | CertificateLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CertificateLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CertificateLogMaxAggregateInputType
+  }
+
+  export type GetCertificateLogAggregateType<T extends CertificateLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateCertificateLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCertificateLog[P]>
+      : GetScalarType<T[P], AggregateCertificateLog[P]>
+  }
+
+
+
+
+  export type CertificateLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CertificateLogWhereInput
+    orderBy?: CertificateLogOrderByWithAggregationInput | CertificateLogOrderByWithAggregationInput[]
+    by: CertificateLogScalarFieldEnum[] | CertificateLogScalarFieldEnum
+    having?: CertificateLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CertificateLogCountAggregateInputType | true
+    _min?: CertificateLogMinAggregateInputType
+    _max?: CertificateLogMaxAggregateInputType
+  }
+
+  export type CertificateLogGroupByOutputType = {
+    id: string
+    certificateId: string
+    action: string
+    performedById: string
+    metadata: JsonValue | null
+    createdAt: Date
+    _count: CertificateLogCountAggregateOutputType | null
+    _min: CertificateLogMinAggregateOutputType | null
+    _max: CertificateLogMaxAggregateOutputType | null
+  }
+
+  type GetCertificateLogGroupByPayload<T extends CertificateLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CertificateLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CertificateLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CertificateLogGroupByOutputType[P]>
+            : GetScalarType<T[P], CertificateLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CertificateLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    certificateId?: boolean
+    action?: boolean
+    performedById?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    certificate?: boolean | CertificateDefaultArgs<ExtArgs>
+    performedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateLog"]>
+
+  export type CertificateLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    certificateId?: boolean
+    action?: boolean
+    performedById?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    certificate?: boolean | CertificateDefaultArgs<ExtArgs>
+    performedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateLog"]>
+
+  export type CertificateLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    certificateId?: boolean
+    action?: boolean
+    performedById?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    certificate?: boolean | CertificateDefaultArgs<ExtArgs>
+    performedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateLog"]>
+
+  export type CertificateLogSelectScalar = {
+    id?: boolean
+    certificateId?: boolean
+    action?: boolean
+    performedById?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+  }
+
+  export type CertificateLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "certificateId" | "action" | "performedById" | "metadata" | "createdAt", ExtArgs["result"]["certificateLog"]>
+  export type CertificateLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certificate?: boolean | CertificateDefaultArgs<ExtArgs>
+    performedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type CertificateLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certificate?: boolean | CertificateDefaultArgs<ExtArgs>
+    performedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type CertificateLogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certificate?: boolean | CertificateDefaultArgs<ExtArgs>
+    performedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $CertificateLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CertificateLog"
+    objects: {
+      certificate: Prisma.$CertificatePayload<ExtArgs>
+      performedBy: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      certificateId: string
+      action: string
+      performedById: string
+      metadata: Prisma.JsonValue | null
+      createdAt: Date
+    }, ExtArgs["result"]["certificateLog"]>
+    composites: {}
+  }
+
+  type CertificateLogGetPayload<S extends boolean | null | undefined | CertificateLogDefaultArgs> = $Result.GetResult<Prisma.$CertificateLogPayload, S>
+
+  type CertificateLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CertificateLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CertificateLogCountAggregateInputType | true
+    }
+
+  export interface CertificateLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CertificateLog'], meta: { name: 'CertificateLog' } }
+    /**
+     * Find zero or one CertificateLog that matches the filter.
+     * @param {CertificateLogFindUniqueArgs} args - Arguments to find a CertificateLog
+     * @example
+     * // Get one CertificateLog
+     * const certificateLog = await prisma.certificateLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CertificateLogFindUniqueArgs>(args: SelectSubset<T, CertificateLogFindUniqueArgs<ExtArgs>>): Prisma__CertificateLogClient<$Result.GetResult<Prisma.$CertificateLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CertificateLog that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CertificateLogFindUniqueOrThrowArgs} args - Arguments to find a CertificateLog
+     * @example
+     * // Get one CertificateLog
+     * const certificateLog = await prisma.certificateLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CertificateLogFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificateLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificateLogClient<$Result.GetResult<Prisma.$CertificateLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CertificateLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateLogFindFirstArgs} args - Arguments to find a CertificateLog
+     * @example
+     * // Get one CertificateLog
+     * const certificateLog = await prisma.certificateLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CertificateLogFindFirstArgs>(args?: SelectSubset<T, CertificateLogFindFirstArgs<ExtArgs>>): Prisma__CertificateLogClient<$Result.GetResult<Prisma.$CertificateLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CertificateLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateLogFindFirstOrThrowArgs} args - Arguments to find a CertificateLog
+     * @example
+     * // Get one CertificateLog
+     * const certificateLog = await prisma.certificateLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CertificateLogFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificateLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificateLogClient<$Result.GetResult<Prisma.$CertificateLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CertificateLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CertificateLogs
+     * const certificateLogs = await prisma.certificateLog.findMany()
+     * 
+     * // Get first 10 CertificateLogs
+     * const certificateLogs = await prisma.certificateLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const certificateLogWithIdOnly = await prisma.certificateLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CertificateLogFindManyArgs>(args?: SelectSubset<T, CertificateLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CertificateLog.
+     * @param {CertificateLogCreateArgs} args - Arguments to create a CertificateLog.
+     * @example
+     * // Create one CertificateLog
+     * const CertificateLog = await prisma.certificateLog.create({
+     *   data: {
+     *     // ... data to create a CertificateLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends CertificateLogCreateArgs>(args: SelectSubset<T, CertificateLogCreateArgs<ExtArgs>>): Prisma__CertificateLogClient<$Result.GetResult<Prisma.$CertificateLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CertificateLogs.
+     * @param {CertificateLogCreateManyArgs} args - Arguments to create many CertificateLogs.
+     * @example
+     * // Create many CertificateLogs
+     * const certificateLog = await prisma.certificateLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CertificateLogCreateManyArgs>(args?: SelectSubset<T, CertificateLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CertificateLogs and returns the data saved in the database.
+     * @param {CertificateLogCreateManyAndReturnArgs} args - Arguments to create many CertificateLogs.
+     * @example
+     * // Create many CertificateLogs
+     * const certificateLog = await prisma.certificateLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CertificateLogs and only return the `id`
+     * const certificateLogWithIdOnly = await prisma.certificateLog.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CertificateLogCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificateLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CertificateLog.
+     * @param {CertificateLogDeleteArgs} args - Arguments to delete one CertificateLog.
+     * @example
+     * // Delete one CertificateLog
+     * const CertificateLog = await prisma.certificateLog.delete({
+     *   where: {
+     *     // ... filter to delete one CertificateLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CertificateLogDeleteArgs>(args: SelectSubset<T, CertificateLogDeleteArgs<ExtArgs>>): Prisma__CertificateLogClient<$Result.GetResult<Prisma.$CertificateLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CertificateLog.
+     * @param {CertificateLogUpdateArgs} args - Arguments to update one CertificateLog.
+     * @example
+     * // Update one CertificateLog
+     * const certificateLog = await prisma.certificateLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CertificateLogUpdateArgs>(args: SelectSubset<T, CertificateLogUpdateArgs<ExtArgs>>): Prisma__CertificateLogClient<$Result.GetResult<Prisma.$CertificateLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CertificateLogs.
+     * @param {CertificateLogDeleteManyArgs} args - Arguments to filter CertificateLogs to delete.
+     * @example
+     * // Delete a few CertificateLogs
+     * const { count } = await prisma.certificateLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CertificateLogDeleteManyArgs>(args?: SelectSubset<T, CertificateLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CertificateLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CertificateLogs
+     * const certificateLog = await prisma.certificateLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CertificateLogUpdateManyArgs>(args: SelectSubset<T, CertificateLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CertificateLogs and returns the data updated in the database.
+     * @param {CertificateLogUpdateManyAndReturnArgs} args - Arguments to update many CertificateLogs.
+     * @example
+     * // Update many CertificateLogs
+     * const certificateLog = await prisma.certificateLog.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CertificateLogs and only return the `id`
+     * const certificateLogWithIdOnly = await prisma.certificateLog.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CertificateLogUpdateManyAndReturnArgs>(args: SelectSubset<T, CertificateLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CertificateLog.
+     * @param {CertificateLogUpsertArgs} args - Arguments to update or create a CertificateLog.
+     * @example
+     * // Update or create a CertificateLog
+     * const certificateLog = await prisma.certificateLog.upsert({
+     *   create: {
+     *     // ... data to create a CertificateLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CertificateLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CertificateLogUpsertArgs>(args: SelectSubset<T, CertificateLogUpsertArgs<ExtArgs>>): Prisma__CertificateLogClient<$Result.GetResult<Prisma.$CertificateLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CertificateLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateLogCountArgs} args - Arguments to filter CertificateLogs to count.
+     * @example
+     * // Count the number of CertificateLogs
+     * const count = await prisma.certificateLog.count({
+     *   where: {
+     *     // ... the filter for the CertificateLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends CertificateLogCountArgs>(
+      args?: Subset<T, CertificateLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CertificateLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CertificateLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CertificateLogAggregateArgs>(args: Subset<T, CertificateLogAggregateArgs>): Prisma.PrismaPromise<GetCertificateLogAggregateType<T>>
+
+    /**
+     * Group by CertificateLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CertificateLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CertificateLogGroupByArgs['orderBy'] }
+        : { orderBy?: CertificateLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CertificateLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCertificateLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CertificateLog model
+   */
+  readonly fields: CertificateLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CertificateLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CertificateLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    certificate<T extends CertificateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CertificateDefaultArgs<ExtArgs>>): Prisma__CertificateClient<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    performedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CertificateLog model
+   */
+  interface CertificateLogFieldRefs {
+    readonly id: FieldRef<"CertificateLog", 'String'>
+    readonly certificateId: FieldRef<"CertificateLog", 'String'>
+    readonly action: FieldRef<"CertificateLog", 'String'>
+    readonly performedById: FieldRef<"CertificateLog", 'String'>
+    readonly metadata: FieldRef<"CertificateLog", 'Json'>
+    readonly createdAt: FieldRef<"CertificateLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CertificateLog findUnique
+   */
+  export type CertificateLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateLog
+     */
+    select?: CertificateLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateLog
+     */
+    omit?: CertificateLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateLogInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateLog to fetch.
+     */
+    where: CertificateLogWhereUniqueInput
+  }
+
+  /**
+   * CertificateLog findUniqueOrThrow
+   */
+  export type CertificateLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateLog
+     */
+    select?: CertificateLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateLog
+     */
+    omit?: CertificateLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateLogInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateLog to fetch.
+     */
+    where: CertificateLogWhereUniqueInput
+  }
+
+  /**
+   * CertificateLog findFirst
+   */
+  export type CertificateLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateLog
+     */
+    select?: CertificateLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateLog
+     */
+    omit?: CertificateLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateLogInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateLog to fetch.
+     */
+    where?: CertificateLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateLogs to fetch.
+     */
+    orderBy?: CertificateLogOrderByWithRelationInput | CertificateLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CertificateLogs.
+     */
+    cursor?: CertificateLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CertificateLogs.
+     */
+    distinct?: CertificateLogScalarFieldEnum | CertificateLogScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateLog findFirstOrThrow
+   */
+  export type CertificateLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateLog
+     */
+    select?: CertificateLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateLog
+     */
+    omit?: CertificateLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateLogInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateLog to fetch.
+     */
+    where?: CertificateLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateLogs to fetch.
+     */
+    orderBy?: CertificateLogOrderByWithRelationInput | CertificateLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CertificateLogs.
+     */
+    cursor?: CertificateLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CertificateLogs.
+     */
+    distinct?: CertificateLogScalarFieldEnum | CertificateLogScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateLog findMany
+   */
+  export type CertificateLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateLog
+     */
+    select?: CertificateLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateLog
+     */
+    omit?: CertificateLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateLogInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateLogs to fetch.
+     */
+    where?: CertificateLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateLogs to fetch.
+     */
+    orderBy?: CertificateLogOrderByWithRelationInput | CertificateLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CertificateLogs.
+     */
+    cursor?: CertificateLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateLogs.
+     */
+    skip?: number
+    distinct?: CertificateLogScalarFieldEnum | CertificateLogScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateLog create
+   */
+  export type CertificateLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateLog
+     */
+    select?: CertificateLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateLog
+     */
+    omit?: CertificateLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CertificateLog.
+     */
+    data: XOR<CertificateLogCreateInput, CertificateLogUncheckedCreateInput>
+  }
+
+  /**
+   * CertificateLog createMany
+   */
+  export type CertificateLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CertificateLogs.
+     */
+    data: CertificateLogCreateManyInput | CertificateLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CertificateLog createManyAndReturn
+   */
+  export type CertificateLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateLog
+     */
+    select?: CertificateLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateLog
+     */
+    omit?: CertificateLogOmit<ExtArgs> | null
+    /**
+     * The data used to create many CertificateLogs.
+     */
+    data: CertificateLogCreateManyInput | CertificateLogCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateLogIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CertificateLog update
+   */
+  export type CertificateLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateLog
+     */
+    select?: CertificateLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateLog
+     */
+    omit?: CertificateLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CertificateLog.
+     */
+    data: XOR<CertificateLogUpdateInput, CertificateLogUncheckedUpdateInput>
+    /**
+     * Choose, which CertificateLog to update.
+     */
+    where: CertificateLogWhereUniqueInput
+  }
+
+  /**
+   * CertificateLog updateMany
+   */
+  export type CertificateLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CertificateLogs.
+     */
+    data: XOR<CertificateLogUpdateManyMutationInput, CertificateLogUncheckedUpdateManyInput>
+    /**
+     * Filter which CertificateLogs to update
+     */
+    where?: CertificateLogWhereInput
+    /**
+     * Limit how many CertificateLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CertificateLog updateManyAndReturn
+   */
+  export type CertificateLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateLog
+     */
+    select?: CertificateLogSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateLog
+     */
+    omit?: CertificateLogOmit<ExtArgs> | null
+    /**
+     * The data used to update CertificateLogs.
+     */
+    data: XOR<CertificateLogUpdateManyMutationInput, CertificateLogUncheckedUpdateManyInput>
+    /**
+     * Filter which CertificateLogs to update
+     */
+    where?: CertificateLogWhereInput
+    /**
+     * Limit how many CertificateLogs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateLogIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CertificateLog upsert
+   */
+  export type CertificateLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateLog
+     */
+    select?: CertificateLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateLog
+     */
+    omit?: CertificateLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CertificateLog to update in case it exists.
+     */
+    where: CertificateLogWhereUniqueInput
+    /**
+     * In case the CertificateLog found by the `where` argument doesn't exist, create a new CertificateLog with this data.
+     */
+    create: XOR<CertificateLogCreateInput, CertificateLogUncheckedCreateInput>
+    /**
+     * In case the CertificateLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CertificateLogUpdateInput, CertificateLogUncheckedUpdateInput>
+  }
+
+  /**
+   * CertificateLog delete
+   */
+  export type CertificateLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateLog
+     */
+    select?: CertificateLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateLog
+     */
+    omit?: CertificateLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateLogInclude<ExtArgs> | null
+    /**
+     * Filter which CertificateLog to delete.
+     */
+    where: CertificateLogWhereUniqueInput
+  }
+
+  /**
+   * CertificateLog deleteMany
+   */
+  export type CertificateLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CertificateLogs to delete
+     */
+    where?: CertificateLogWhereInput
+    /**
+     * Limit how many CertificateLogs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CertificateLog without action
+   */
+  export type CertificateLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateLog
+     */
+    select?: CertificateLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateLog
+     */
+    omit?: CertificateLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateLogInclude<ExtArgs> | null
   }
 
 
@@ -3464,12 +4728,32 @@ export namespace Prisma {
   export type CertificateScalarFieldEnum = (typeof CertificateScalarFieldEnum)[keyof typeof CertificateScalarFieldEnum]
 
 
+  export const CertificateLogScalarFieldEnum: {
+    id: 'id',
+    certificateId: 'certificateId',
+    action: 'action',
+    performedById: 'performedById',
+    metadata: 'metadata',
+    createdAt: 'createdAt'
+  };
+
+  export type CertificateLogScalarFieldEnum = (typeof CertificateLogScalarFieldEnum)[keyof typeof CertificateLogScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
   export const QueryMode: {
@@ -3486,6 +4770,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -3571,6 +4864,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -3609,6 +4916,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     certificates?: CertificateListRelationFilter
+    performedLogs?: CertificateLogListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -3630,6 +4938,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     certificates?: CertificateOrderByRelationAggregateInput
+    performedLogs?: CertificateLogOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -3654,6 +4963,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     certificates?: CertificateListRelationFilter
+    performedLogs?: CertificateLogListRelationFilter
   }, "id" | "email" | "username" | "securityId">
 
   export type UserOrderByWithAggregationInput = {
@@ -3720,6 +5030,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Certificate"> | Date | string
     updatedAt?: DateTimeFilter<"Certificate"> | Date | string
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
+    logs?: CertificateLogListRelationFilter
   }
 
   export type CertificateOrderByWithRelationInput = {
@@ -3735,6 +5046,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     owner?: UserOrderByWithRelationInput
+    logs?: CertificateLogOrderByRelationAggregateInput
   }
 
   export type CertificateWhereUniqueInput = Prisma.AtLeast<{
@@ -3753,6 +5065,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Certificate"> | Date | string
     updatedAt?: DateTimeFilter<"Certificate"> | Date | string
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
+    logs?: CertificateLogListRelationFilter
   }, "id">
 
   export type CertificateOrderByWithAggregationInput = {
@@ -3789,6 +5102,69 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Certificate"> | Date | string
   }
 
+  export type CertificateLogWhereInput = {
+    AND?: CertificateLogWhereInput | CertificateLogWhereInput[]
+    OR?: CertificateLogWhereInput[]
+    NOT?: CertificateLogWhereInput | CertificateLogWhereInput[]
+    id?: StringFilter<"CertificateLog"> | string
+    certificateId?: StringFilter<"CertificateLog"> | string
+    action?: StringFilter<"CertificateLog"> | string
+    performedById?: StringFilter<"CertificateLog"> | string
+    metadata?: JsonNullableFilter<"CertificateLog">
+    createdAt?: DateTimeFilter<"CertificateLog"> | Date | string
+    certificate?: XOR<CertificateScalarRelationFilter, CertificateWhereInput>
+    performedBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type CertificateLogOrderByWithRelationInput = {
+    id?: SortOrder
+    certificateId?: SortOrder
+    action?: SortOrder
+    performedById?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    certificate?: CertificateOrderByWithRelationInput
+    performedBy?: UserOrderByWithRelationInput
+  }
+
+  export type CertificateLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CertificateLogWhereInput | CertificateLogWhereInput[]
+    OR?: CertificateLogWhereInput[]
+    NOT?: CertificateLogWhereInput | CertificateLogWhereInput[]
+    certificateId?: StringFilter<"CertificateLog"> | string
+    action?: StringFilter<"CertificateLog"> | string
+    performedById?: StringFilter<"CertificateLog"> | string
+    metadata?: JsonNullableFilter<"CertificateLog">
+    createdAt?: DateTimeFilter<"CertificateLog"> | Date | string
+    certificate?: XOR<CertificateScalarRelationFilter, CertificateWhereInput>
+    performedBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type CertificateLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    certificateId?: SortOrder
+    action?: SortOrder
+    performedById?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: CertificateLogCountOrderByAggregateInput
+    _max?: CertificateLogMaxOrderByAggregateInput
+    _min?: CertificateLogMinOrderByAggregateInput
+  }
+
+  export type CertificateLogScalarWhereWithAggregatesInput = {
+    AND?: CertificateLogScalarWhereWithAggregatesInput | CertificateLogScalarWhereWithAggregatesInput[]
+    OR?: CertificateLogScalarWhereWithAggregatesInput[]
+    NOT?: CertificateLogScalarWhereWithAggregatesInput | CertificateLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CertificateLog"> | string
+    certificateId?: StringWithAggregatesFilter<"CertificateLog"> | string
+    action?: StringWithAggregatesFilter<"CertificateLog"> | string
+    performedById?: StringWithAggregatesFilter<"CertificateLog"> | string
+    metadata?: JsonNullableWithAggregatesFilter<"CertificateLog">
+    createdAt?: DateTimeWithAggregatesFilter<"CertificateLog"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
@@ -3808,6 +5184,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     certificates?: CertificateCreateNestedManyWithoutOwnerInput
+    performedLogs?: CertificateLogCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -3829,6 +5206,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     certificates?: CertificateUncheckedCreateNestedManyWithoutOwnerInput
+    performedLogs?: CertificateLogUncheckedCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserUpdateInput = {
@@ -3850,6 +5228,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     certificates?: CertificateUpdateManyWithoutOwnerNestedInput
+    performedLogs?: CertificateLogUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -3871,6 +5250,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     certificates?: CertificateUncheckedUpdateManyWithoutOwnerNestedInput
+    performedLogs?: CertificateLogUncheckedUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -3945,6 +5325,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     owner: UserCreateNestedOneWithoutCertificatesInput
+    logs?: CertificateLogCreateNestedManyWithoutCertificateInput
   }
 
   export type CertificateUncheckedCreateInput = {
@@ -3959,6 +5340,7 @@ export namespace Prisma {
     ownerId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    logs?: CertificateLogUncheckedCreateNestedManyWithoutCertificateInput
   }
 
   export type CertificateUpdateInput = {
@@ -3973,6 +5355,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     owner?: UserUpdateOneRequiredWithoutCertificatesNestedInput
+    logs?: CertificateLogUpdateManyWithoutCertificateNestedInput
   }
 
   export type CertificateUncheckedUpdateInput = {
@@ -3987,6 +5370,7 @@ export namespace Prisma {
     ownerId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    logs?: CertificateLogUncheckedUpdateManyWithoutCertificateNestedInput
   }
 
   export type CertificateCreateManyInput = {
@@ -4028,6 +5412,67 @@ export namespace Prisma {
     ownerId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CertificateLogCreateInput = {
+    id?: string
+    action: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    certificate: CertificateCreateNestedOneWithoutLogsInput
+    performedBy: UserCreateNestedOneWithoutPerformedLogsInput
+  }
+
+  export type CertificateLogUncheckedCreateInput = {
+    id?: string
+    certificateId: string
+    action: string
+    performedById: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type CertificateLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    certificate?: CertificateUpdateOneRequiredWithoutLogsNestedInput
+    performedBy?: UserUpdateOneRequiredWithoutPerformedLogsNestedInput
+  }
+
+  export type CertificateLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    certificateId?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    performedById?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CertificateLogCreateManyInput = {
+    id?: string
+    certificateId: string
+    action: string
+    performedById: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type CertificateLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CertificateLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    certificateId?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    performedById?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -4111,12 +5556,22 @@ export namespace Prisma {
     none?: CertificateWhereInput
   }
 
+  export type CertificateLogListRelationFilter = {
+    every?: CertificateLogWhereInput
+    some?: CertificateLogWhereInput
+    none?: CertificateLogWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
   }
 
   export type CertificateOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CertificateLogOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -4349,6 +5804,85 @@ export namespace Prisma {
     _min?: NestedEnumCertificateStatusFilter<$PrismaModel>
     _max?: NestedEnumCertificateStatusFilter<$PrismaModel>
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type CertificateScalarRelationFilter = {
+    is?: CertificateWhereInput
+    isNot?: CertificateWhereInput
+  }
+
+  export type CertificateLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    certificateId?: SortOrder
+    action?: SortOrder
+    performedById?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CertificateLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    certificateId?: SortOrder
+    action?: SortOrder
+    performedById?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CertificateLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    certificateId?: SortOrder
+    action?: SortOrder
+    performedById?: SortOrder
+    createdAt?: SortOrder
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
 
   export type CertificateCreateNestedManyWithoutOwnerInput = {
     create?: XOR<CertificateCreateWithoutOwnerInput, CertificateUncheckedCreateWithoutOwnerInput> | CertificateCreateWithoutOwnerInput[] | CertificateUncheckedCreateWithoutOwnerInput[]
@@ -4357,11 +5891,25 @@ export namespace Prisma {
     connect?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
   }
 
+  export type CertificateLogCreateNestedManyWithoutPerformedByInput = {
+    create?: XOR<CertificateLogCreateWithoutPerformedByInput, CertificateLogUncheckedCreateWithoutPerformedByInput> | CertificateLogCreateWithoutPerformedByInput[] | CertificateLogUncheckedCreateWithoutPerformedByInput[]
+    connectOrCreate?: CertificateLogCreateOrConnectWithoutPerformedByInput | CertificateLogCreateOrConnectWithoutPerformedByInput[]
+    createMany?: CertificateLogCreateManyPerformedByInputEnvelope
+    connect?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
+  }
+
   export type CertificateUncheckedCreateNestedManyWithoutOwnerInput = {
     create?: XOR<CertificateCreateWithoutOwnerInput, CertificateUncheckedCreateWithoutOwnerInput> | CertificateCreateWithoutOwnerInput[] | CertificateUncheckedCreateWithoutOwnerInput[]
     connectOrCreate?: CertificateCreateOrConnectWithoutOwnerInput | CertificateCreateOrConnectWithoutOwnerInput[]
     createMany?: CertificateCreateManyOwnerInputEnvelope
     connect?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
+  }
+
+  export type CertificateLogUncheckedCreateNestedManyWithoutPerformedByInput = {
+    create?: XOR<CertificateLogCreateWithoutPerformedByInput, CertificateLogUncheckedCreateWithoutPerformedByInput> | CertificateLogCreateWithoutPerformedByInput[] | CertificateLogUncheckedCreateWithoutPerformedByInput[]
+    connectOrCreate?: CertificateLogCreateOrConnectWithoutPerformedByInput | CertificateLogCreateOrConnectWithoutPerformedByInput[]
+    createMany?: CertificateLogCreateManyPerformedByInputEnvelope
+    connect?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -4410,6 +5958,20 @@ export namespace Prisma {
     deleteMany?: CertificateScalarWhereInput | CertificateScalarWhereInput[]
   }
 
+  export type CertificateLogUpdateManyWithoutPerformedByNestedInput = {
+    create?: XOR<CertificateLogCreateWithoutPerformedByInput, CertificateLogUncheckedCreateWithoutPerformedByInput> | CertificateLogCreateWithoutPerformedByInput[] | CertificateLogUncheckedCreateWithoutPerformedByInput[]
+    connectOrCreate?: CertificateLogCreateOrConnectWithoutPerformedByInput | CertificateLogCreateOrConnectWithoutPerformedByInput[]
+    upsert?: CertificateLogUpsertWithWhereUniqueWithoutPerformedByInput | CertificateLogUpsertWithWhereUniqueWithoutPerformedByInput[]
+    createMany?: CertificateLogCreateManyPerformedByInputEnvelope
+    set?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
+    disconnect?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
+    delete?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
+    connect?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
+    update?: CertificateLogUpdateWithWhereUniqueWithoutPerformedByInput | CertificateLogUpdateWithWhereUniqueWithoutPerformedByInput[]
+    updateMany?: CertificateLogUpdateManyWithWhereWithoutPerformedByInput | CertificateLogUpdateManyWithWhereWithoutPerformedByInput[]
+    deleteMany?: CertificateLogScalarWhereInput | CertificateLogScalarWhereInput[]
+  }
+
   export type CertificateUncheckedUpdateManyWithoutOwnerNestedInput = {
     create?: XOR<CertificateCreateWithoutOwnerInput, CertificateUncheckedCreateWithoutOwnerInput> | CertificateCreateWithoutOwnerInput[] | CertificateUncheckedCreateWithoutOwnerInput[]
     connectOrCreate?: CertificateCreateOrConnectWithoutOwnerInput | CertificateCreateOrConnectWithoutOwnerInput[]
@@ -4424,10 +5986,38 @@ export namespace Prisma {
     deleteMany?: CertificateScalarWhereInput | CertificateScalarWhereInput[]
   }
 
+  export type CertificateLogUncheckedUpdateManyWithoutPerformedByNestedInput = {
+    create?: XOR<CertificateLogCreateWithoutPerformedByInput, CertificateLogUncheckedCreateWithoutPerformedByInput> | CertificateLogCreateWithoutPerformedByInput[] | CertificateLogUncheckedCreateWithoutPerformedByInput[]
+    connectOrCreate?: CertificateLogCreateOrConnectWithoutPerformedByInput | CertificateLogCreateOrConnectWithoutPerformedByInput[]
+    upsert?: CertificateLogUpsertWithWhereUniqueWithoutPerformedByInput | CertificateLogUpsertWithWhereUniqueWithoutPerformedByInput[]
+    createMany?: CertificateLogCreateManyPerformedByInputEnvelope
+    set?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
+    disconnect?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
+    delete?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
+    connect?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
+    update?: CertificateLogUpdateWithWhereUniqueWithoutPerformedByInput | CertificateLogUpdateWithWhereUniqueWithoutPerformedByInput[]
+    updateMany?: CertificateLogUpdateManyWithWhereWithoutPerformedByInput | CertificateLogUpdateManyWithWhereWithoutPerformedByInput[]
+    deleteMany?: CertificateLogScalarWhereInput | CertificateLogScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutCertificatesInput = {
     create?: XOR<UserCreateWithoutCertificatesInput, UserUncheckedCreateWithoutCertificatesInput>
     connectOrCreate?: UserCreateOrConnectWithoutCertificatesInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type CertificateLogCreateNestedManyWithoutCertificateInput = {
+    create?: XOR<CertificateLogCreateWithoutCertificateInput, CertificateLogUncheckedCreateWithoutCertificateInput> | CertificateLogCreateWithoutCertificateInput[] | CertificateLogUncheckedCreateWithoutCertificateInput[]
+    connectOrCreate?: CertificateLogCreateOrConnectWithoutCertificateInput | CertificateLogCreateOrConnectWithoutCertificateInput[]
+    createMany?: CertificateLogCreateManyCertificateInputEnvelope
+    connect?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
+  }
+
+  export type CertificateLogUncheckedCreateNestedManyWithoutCertificateInput = {
+    create?: XOR<CertificateLogCreateWithoutCertificateInput, CertificateLogUncheckedCreateWithoutCertificateInput> | CertificateLogCreateWithoutCertificateInput[] | CertificateLogUncheckedCreateWithoutCertificateInput[]
+    connectOrCreate?: CertificateLogCreateOrConnectWithoutCertificateInput | CertificateLogCreateOrConnectWithoutCertificateInput[]
+    createMany?: CertificateLogCreateManyCertificateInputEnvelope
+    connect?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
   }
 
   export type EnumCertificateStatusFieldUpdateOperationsInput = {
@@ -4440,6 +6030,62 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutCertificatesInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCertificatesInput, UserUpdateWithoutCertificatesInput>, UserUncheckedUpdateWithoutCertificatesInput>
+  }
+
+  export type CertificateLogUpdateManyWithoutCertificateNestedInput = {
+    create?: XOR<CertificateLogCreateWithoutCertificateInput, CertificateLogUncheckedCreateWithoutCertificateInput> | CertificateLogCreateWithoutCertificateInput[] | CertificateLogUncheckedCreateWithoutCertificateInput[]
+    connectOrCreate?: CertificateLogCreateOrConnectWithoutCertificateInput | CertificateLogCreateOrConnectWithoutCertificateInput[]
+    upsert?: CertificateLogUpsertWithWhereUniqueWithoutCertificateInput | CertificateLogUpsertWithWhereUniqueWithoutCertificateInput[]
+    createMany?: CertificateLogCreateManyCertificateInputEnvelope
+    set?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
+    disconnect?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
+    delete?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
+    connect?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
+    update?: CertificateLogUpdateWithWhereUniqueWithoutCertificateInput | CertificateLogUpdateWithWhereUniqueWithoutCertificateInput[]
+    updateMany?: CertificateLogUpdateManyWithWhereWithoutCertificateInput | CertificateLogUpdateManyWithWhereWithoutCertificateInput[]
+    deleteMany?: CertificateLogScalarWhereInput | CertificateLogScalarWhereInput[]
+  }
+
+  export type CertificateLogUncheckedUpdateManyWithoutCertificateNestedInput = {
+    create?: XOR<CertificateLogCreateWithoutCertificateInput, CertificateLogUncheckedCreateWithoutCertificateInput> | CertificateLogCreateWithoutCertificateInput[] | CertificateLogUncheckedCreateWithoutCertificateInput[]
+    connectOrCreate?: CertificateLogCreateOrConnectWithoutCertificateInput | CertificateLogCreateOrConnectWithoutCertificateInput[]
+    upsert?: CertificateLogUpsertWithWhereUniqueWithoutCertificateInput | CertificateLogUpsertWithWhereUniqueWithoutCertificateInput[]
+    createMany?: CertificateLogCreateManyCertificateInputEnvelope
+    set?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
+    disconnect?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
+    delete?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
+    connect?: CertificateLogWhereUniqueInput | CertificateLogWhereUniqueInput[]
+    update?: CertificateLogUpdateWithWhereUniqueWithoutCertificateInput | CertificateLogUpdateWithWhereUniqueWithoutCertificateInput[]
+    updateMany?: CertificateLogUpdateManyWithWhereWithoutCertificateInput | CertificateLogUpdateManyWithWhereWithoutCertificateInput[]
+    deleteMany?: CertificateLogScalarWhereInput | CertificateLogScalarWhereInput[]
+  }
+
+  export type CertificateCreateNestedOneWithoutLogsInput = {
+    create?: XOR<CertificateCreateWithoutLogsInput, CertificateUncheckedCreateWithoutLogsInput>
+    connectOrCreate?: CertificateCreateOrConnectWithoutLogsInput
+    connect?: CertificateWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutPerformedLogsInput = {
+    create?: XOR<UserCreateWithoutPerformedLogsInput, UserUncheckedCreateWithoutPerformedLogsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPerformedLogsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type CertificateUpdateOneRequiredWithoutLogsNestedInput = {
+    create?: XOR<CertificateCreateWithoutLogsInput, CertificateUncheckedCreateWithoutLogsInput>
+    connectOrCreate?: CertificateCreateOrConnectWithoutLogsInput
+    upsert?: CertificateUpsertWithoutLogsInput
+    connect?: CertificateWhereUniqueInput
+    update?: XOR<XOR<CertificateUpdateToOneWithWhereWithoutLogsInput, CertificateUpdateWithoutLogsInput>, CertificateUncheckedUpdateWithoutLogsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutPerformedLogsNestedInput = {
+    create?: XOR<UserCreateWithoutPerformedLogsInput, UserUncheckedCreateWithoutPerformedLogsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPerformedLogsInput
+    upsert?: UserUpsertWithoutPerformedLogsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPerformedLogsInput, UserUpdateWithoutPerformedLogsInput>, UserUncheckedUpdateWithoutPerformedLogsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -4649,6 +6295,29 @@ export namespace Prisma {
     _min?: NestedEnumCertificateStatusFilter<$PrismaModel>
     _max?: NestedEnumCertificateStatusFilter<$PrismaModel>
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type CertificateCreateWithoutOwnerInput = {
     id?: string
@@ -4661,6 +6330,7 @@ export namespace Prisma {
     verificationHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    logs?: CertificateLogCreateNestedManyWithoutCertificateInput
   }
 
   export type CertificateUncheckedCreateWithoutOwnerInput = {
@@ -4674,6 +6344,7 @@ export namespace Prisma {
     verificationHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    logs?: CertificateLogUncheckedCreateNestedManyWithoutCertificateInput
   }
 
   export type CertificateCreateOrConnectWithoutOwnerInput = {
@@ -4683,6 +6354,32 @@ export namespace Prisma {
 
   export type CertificateCreateManyOwnerInputEnvelope = {
     data: CertificateCreateManyOwnerInput | CertificateCreateManyOwnerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CertificateLogCreateWithoutPerformedByInput = {
+    id?: string
+    action: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    certificate: CertificateCreateNestedOneWithoutLogsInput
+  }
+
+  export type CertificateLogUncheckedCreateWithoutPerformedByInput = {
+    id?: string
+    certificateId: string
+    action: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type CertificateLogCreateOrConnectWithoutPerformedByInput = {
+    where: CertificateLogWhereUniqueInput
+    create: XOR<CertificateLogCreateWithoutPerformedByInput, CertificateLogUncheckedCreateWithoutPerformedByInput>
+  }
+
+  export type CertificateLogCreateManyPerformedByInputEnvelope = {
+    data: CertificateLogCreateManyPerformedByInput | CertificateLogCreateManyPerformedByInput[]
     skipDuplicates?: boolean
   }
 
@@ -4719,6 +6416,34 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Certificate"> | Date | string
   }
 
+  export type CertificateLogUpsertWithWhereUniqueWithoutPerformedByInput = {
+    where: CertificateLogWhereUniqueInput
+    update: XOR<CertificateLogUpdateWithoutPerformedByInput, CertificateLogUncheckedUpdateWithoutPerformedByInput>
+    create: XOR<CertificateLogCreateWithoutPerformedByInput, CertificateLogUncheckedCreateWithoutPerformedByInput>
+  }
+
+  export type CertificateLogUpdateWithWhereUniqueWithoutPerformedByInput = {
+    where: CertificateLogWhereUniqueInput
+    data: XOR<CertificateLogUpdateWithoutPerformedByInput, CertificateLogUncheckedUpdateWithoutPerformedByInput>
+  }
+
+  export type CertificateLogUpdateManyWithWhereWithoutPerformedByInput = {
+    where: CertificateLogScalarWhereInput
+    data: XOR<CertificateLogUpdateManyMutationInput, CertificateLogUncheckedUpdateManyWithoutPerformedByInput>
+  }
+
+  export type CertificateLogScalarWhereInput = {
+    AND?: CertificateLogScalarWhereInput | CertificateLogScalarWhereInput[]
+    OR?: CertificateLogScalarWhereInput[]
+    NOT?: CertificateLogScalarWhereInput | CertificateLogScalarWhereInput[]
+    id?: StringFilter<"CertificateLog"> | string
+    certificateId?: StringFilter<"CertificateLog"> | string
+    action?: StringFilter<"CertificateLog"> | string
+    performedById?: StringFilter<"CertificateLog"> | string
+    metadata?: JsonNullableFilter<"CertificateLog">
+    createdAt?: DateTimeFilter<"CertificateLog"> | Date | string
+  }
+
   export type UserCreateWithoutCertificatesInput = {
     id?: string
     email: string
@@ -4737,6 +6462,7 @@ export namespace Prisma {
     lastLogin?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    performedLogs?: CertificateLogCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserUncheckedCreateWithoutCertificatesInput = {
@@ -4757,11 +6483,38 @@ export namespace Prisma {
     lastLogin?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    performedLogs?: CertificateLogUncheckedCreateNestedManyWithoutPerformedByInput
   }
 
   export type UserCreateOrConnectWithoutCertificatesInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutCertificatesInput, UserUncheckedCreateWithoutCertificatesInput>
+  }
+
+  export type CertificateLogCreateWithoutCertificateInput = {
+    id?: string
+    action: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    performedBy: UserCreateNestedOneWithoutPerformedLogsInput
+  }
+
+  export type CertificateLogUncheckedCreateWithoutCertificateInput = {
+    id?: string
+    action: string
+    performedById: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type CertificateLogCreateOrConnectWithoutCertificateInput = {
+    where: CertificateLogWhereUniqueInput
+    create: XOR<CertificateLogCreateWithoutCertificateInput, CertificateLogUncheckedCreateWithoutCertificateInput>
+  }
+
+  export type CertificateLogCreateManyCertificateInputEnvelope = {
+    data: CertificateLogCreateManyCertificateInput | CertificateLogCreateManyCertificateInput[]
+    skipDuplicates?: boolean
   }
 
   export type UserUpsertWithoutCertificatesInput = {
@@ -4793,6 +6546,7 @@ export namespace Prisma {
     lastLogin?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    performedLogs?: CertificateLogUpdateManyWithoutPerformedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCertificatesInput = {
@@ -4813,6 +6567,195 @@ export namespace Prisma {
     lastLogin?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    performedLogs?: CertificateLogUncheckedUpdateManyWithoutPerformedByNestedInput
+  }
+
+  export type CertificateLogUpsertWithWhereUniqueWithoutCertificateInput = {
+    where: CertificateLogWhereUniqueInput
+    update: XOR<CertificateLogUpdateWithoutCertificateInput, CertificateLogUncheckedUpdateWithoutCertificateInput>
+    create: XOR<CertificateLogCreateWithoutCertificateInput, CertificateLogUncheckedCreateWithoutCertificateInput>
+  }
+
+  export type CertificateLogUpdateWithWhereUniqueWithoutCertificateInput = {
+    where: CertificateLogWhereUniqueInput
+    data: XOR<CertificateLogUpdateWithoutCertificateInput, CertificateLogUncheckedUpdateWithoutCertificateInput>
+  }
+
+  export type CertificateLogUpdateManyWithWhereWithoutCertificateInput = {
+    where: CertificateLogScalarWhereInput
+    data: XOR<CertificateLogUpdateManyMutationInput, CertificateLogUncheckedUpdateManyWithoutCertificateInput>
+  }
+
+  export type CertificateCreateWithoutLogsInput = {
+    id?: string
+    title?: string | null
+    description?: string | null
+    fileUrl: string
+    fileType: string
+    s3Key: string
+    status?: $Enums.CertificateStatus
+    verificationHash?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutCertificatesInput
+  }
+
+  export type CertificateUncheckedCreateWithoutLogsInput = {
+    id?: string
+    title?: string | null
+    description?: string | null
+    fileUrl: string
+    fileType: string
+    s3Key: string
+    status?: $Enums.CertificateStatus
+    verificationHash?: string | null
+    ownerId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CertificateCreateOrConnectWithoutLogsInput = {
+    where: CertificateWhereUniqueInput
+    create: XOR<CertificateCreateWithoutLogsInput, CertificateUncheckedCreateWithoutLogsInput>
+  }
+
+  export type UserCreateWithoutPerformedLogsInput = {
+    id?: string
+    email: string
+    username: string
+    password: string
+    fullName?: string | null
+    securityId: string
+    admin?: boolean
+    avatar?: string | null
+    usertype?: $Enums.Role
+    institutionname?: string | null
+    refreshToken?: string | null
+    failedLoginAttempts?: number
+    accountLocked?: boolean
+    lockExpiresAt?: Date | string | null
+    lastLogin?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    certificates?: CertificateCreateNestedManyWithoutOwnerInput
+  }
+
+  export type UserUncheckedCreateWithoutPerformedLogsInput = {
+    id?: string
+    email: string
+    username: string
+    password: string
+    fullName?: string | null
+    securityId: string
+    admin?: boolean
+    avatar?: string | null
+    usertype?: $Enums.Role
+    institutionname?: string | null
+    refreshToken?: string | null
+    failedLoginAttempts?: number
+    accountLocked?: boolean
+    lockExpiresAt?: Date | string | null
+    lastLogin?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    certificates?: CertificateUncheckedCreateNestedManyWithoutOwnerInput
+  }
+
+  export type UserCreateOrConnectWithoutPerformedLogsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPerformedLogsInput, UserUncheckedCreateWithoutPerformedLogsInput>
+  }
+
+  export type CertificateUpsertWithoutLogsInput = {
+    update: XOR<CertificateUpdateWithoutLogsInput, CertificateUncheckedUpdateWithoutLogsInput>
+    create: XOR<CertificateCreateWithoutLogsInput, CertificateUncheckedCreateWithoutLogsInput>
+    where?: CertificateWhereInput
+  }
+
+  export type CertificateUpdateToOneWithWhereWithoutLogsInput = {
+    where?: CertificateWhereInput
+    data: XOR<CertificateUpdateWithoutLogsInput, CertificateUncheckedUpdateWithoutLogsInput>
+  }
+
+  export type CertificateUpdateWithoutLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    s3Key?: StringFieldUpdateOperationsInput | string
+    status?: EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
+    verificationHash?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutCertificatesNestedInput
+  }
+
+  export type CertificateUncheckedUpdateWithoutLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    s3Key?: StringFieldUpdateOperationsInput | string
+    status?: EnumCertificateStatusFieldUpdateOperationsInput | $Enums.CertificateStatus
+    verificationHash?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutPerformedLogsInput = {
+    update: XOR<UserUpdateWithoutPerformedLogsInput, UserUncheckedUpdateWithoutPerformedLogsInput>
+    create: XOR<UserCreateWithoutPerformedLogsInput, UserUncheckedCreateWithoutPerformedLogsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPerformedLogsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPerformedLogsInput, UserUncheckedUpdateWithoutPerformedLogsInput>
+  }
+
+  export type UserUpdateWithoutPerformedLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    securityId?: StringFieldUpdateOperationsInput | string
+    admin?: BoolFieldUpdateOperationsInput | boolean
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    usertype?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    institutionname?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    failedLoginAttempts?: IntFieldUpdateOperationsInput | number
+    accountLocked?: BoolFieldUpdateOperationsInput | boolean
+    lockExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastLogin?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    certificates?: CertificateUpdateManyWithoutOwnerNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPerformedLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    securityId?: StringFieldUpdateOperationsInput | string
+    admin?: BoolFieldUpdateOperationsInput | boolean
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    usertype?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    institutionname?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    failedLoginAttempts?: IntFieldUpdateOperationsInput | number
+    accountLocked?: BoolFieldUpdateOperationsInput | boolean
+    lockExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastLogin?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    certificates?: CertificateUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
   export type CertificateCreateManyOwnerInput = {
@@ -4828,6 +6771,14 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type CertificateLogCreateManyPerformedByInput = {
+    id?: string
+    certificateId: string
+    action: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
   export type CertificateUpdateWithoutOwnerInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4839,6 +6790,7 @@ export namespace Prisma {
     verificationHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    logs?: CertificateLogUpdateManyWithoutCertificateNestedInput
   }
 
   export type CertificateUncheckedUpdateWithoutOwnerInput = {
@@ -4852,6 +6804,7 @@ export namespace Prisma {
     verificationHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    logs?: CertificateLogUncheckedUpdateManyWithoutCertificateNestedInput
   }
 
   export type CertificateUncheckedUpdateManyWithoutOwnerInput = {
@@ -4865,6 +6818,62 @@ export namespace Prisma {
     verificationHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CertificateLogUpdateWithoutPerformedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    certificate?: CertificateUpdateOneRequiredWithoutLogsNestedInput
+  }
+
+  export type CertificateLogUncheckedUpdateWithoutPerformedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    certificateId?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CertificateLogUncheckedUpdateManyWithoutPerformedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    certificateId?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CertificateLogCreateManyCertificateInput = {
+    id?: string
+    action: string
+    performedById: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type CertificateLogUpdateWithoutCertificateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    performedBy?: UserUpdateOneRequiredWithoutPerformedLogsNestedInput
+  }
+
+  export type CertificateLogUncheckedUpdateWithoutCertificateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    performedById?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CertificateLogUncheckedUpdateManyWithoutCertificateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    performedById?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

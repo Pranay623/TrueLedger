@@ -31,7 +31,8 @@ model User {
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
 
-  certificates Certificate[]
+  certificates  Certificate[]
+  performedLogs CertificateLog[] @relation("UserToCertificateLog")
 
   @@map("users")
 }
@@ -52,6 +53,8 @@ model Certificate {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  logs CertificateLog[] @relation("CertificateToCertificateLog")
 }
 
 enum CertificateStatus {
@@ -59,4 +62,21 @@ enum CertificateStatus {
   VERIFIED
   APPROVED
   REJECTED
+}
+
+model CertificateLog {
+  id String @id @default(uuid())
+
+  certificateId String
+  action        String
+  performedById String
+  metadata      Json?
+
+  createdAt DateTime @default(now())
+
+  certificate Certificate @relation("CertificateToCertificateLog", fields: [certificateId], references: [id])
+  performedBy User        @relation("UserToCertificateLog", fields: [performedById], references: [id])
+
+  @@index([certificateId])
+  @@index([performedById])
 }
