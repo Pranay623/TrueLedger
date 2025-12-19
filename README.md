@@ -1,202 +1,153 @@
-<h1 align="center">  
-  🔐 TrueLedger  
-</h1>
-
-<h3 align="center">  
-  <em>The Future of Digital Certificates — AI + Blockchain Powered</em>  
-</h3>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js" />
-  <img src="https://img.shields.io/badge/Prisma-ORM-blue?style=flat-square&logo=prisma" />
-  <img src="https://img.shields.io/badge/Blockchain-Ready-green?style=flat-square&logo=bitcoin" />
-  <img src="https://img.shields.io/badge/AI%2FML-Integrated-purple?style=flat-square&logo=opencv" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" />
-</p>
+<div align="center">
+  <h1>🔐 TrueLedger</h1>
+  <h3>The Future of Digital Certificates — AI + Blockchain Powered</h3>
+  
+  <p>
+    <img src="https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js" />
+    <img src="https://img.shields.io/badge/React-19-cyan?style=flat-square&logo=react" />
+    <img src="https://img.shields.io/badge/Prisma-ORM-blue?style=flat-square&logo=prisma" />
+    <img src="https://img.shields.io/badge/Tailwind-v4-38bdf8?style=flat-square&logo=tailwindcss" />
+    <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" />
+  </p>
+  
+  <p>
+    <strong>TrueLedger</strong> is a next-generation platform for issuing, storing, and verifying digital certificates with immutable trust.
+  </p>
+</div>
 
 ---
 
 ## 🌟 Overview
 
-**TrueLedger** is a modern, full-stack certificate automation and verification platform built entirely on **Next.js App Router** with a fully modular backend integrated directly into `/app/api/**`.
+**TrueLedger** is an enterprise-grade certificate automation platform built on the cutting-edge **Next.js 16 App Router**. It bridges the gap between traditional document management and Web3 security by combining:
 
-It combines:
+- **🔗 Blockchain Immutability**: Cryptographic hashing ensures certificates can never be tampered with.
+- **🧠 AI/ML Fraud Detection**: Intelligent verification layers to prevent forgery.
+- **⚡ Modern Architecture**: Built with React 19, Server Actions, and a modular API-first backend.
 
-- **Blockchain hashing** for tamper-proof certificates  
-- **AI/ML fraud detection**  
-- **PDF generation & verification**  
-- **Modern dashboards and UI experiences**  
-- **Enterprise-grade backend architecture (Controllers → Services → DB)**  
-
-Designed for organizations, institutions, and platforms requiring **secure certificate issuance, automation, and verification at scale**.
+Designed for universities, certification bodies, and training platforms to issue verifiable credentials at scale.
 
 ---
 
 ## ✨ Features
 
-### 🚀 Platform Features
 | Feature | Description |
-|--------|-------------|
-| 🔐 **Authentication System** | JWT-based login, register, refresh tokens |
-| 🧾 **Certificate Issuance** | Issue, store, and manage digital certificates |
-| 📡 **Blockchain Integration** | Store certificate hashes in blockchain for immutability |
-| 🤖 **AI/ML Verification** | Detect tampered or fraudulent certificates |
-| 📄 **PDF & Template Support** | Generate certificate PDFs dynamically |
-| 🔍 **Instant Verification** | Public certificate verification by ID or QR |
-| 🛡️ **Role-Based Access** | Admin & user modes |
-| ☁️ **File Upload System** | Next.js-compatible secure upload middleware |
-| 📊 **Modern Dashboard UI** | Built with Tailwind + shadcn/UI |
-
----
-
-## 📸 UI Preview
-
-> **These are placeholders — replace with real screenshots once available.**
-
-### 🔑 Authentication
-![Auth Page](docs/screens/auth.png)
-
-### 📊 Dashboard
-![Dashboard](docs/screens/dashboard.png)
-
-### 🎓 Certificate Issuance
-![Certificate](docs/screens/certificate.png)
-
-### 🔍 Public Verification
-![Verification](docs/screens/verify.png)
-
----
-
-## 🏗️ System Architecture
-
-Frontend (Next.js App Router)
-│
-├── UI Components (shadcn)
-├── Auth Context + Hooks
-│
-└── API Layer (/app/api/**)
-│
-├── Controller Layer (Business rules)
-├── Service Layer (DB, Blockchain, ML)
-├── Middleware (Auth, Validation, Upload)
-└── Prisma ORM → Database
-│
-├── User
-├── Certificate
-└── BlockchainRecord
-
----
-
-## 📁 Folder Structure (Backend Inside Next.js)
-
-trueledger/
-├── app/
-│ ├── api/
-│ │ ├── auth/
-│ │ │ ├── login/route.ts
-│ │ │ ├── register/route.ts
-│ │ │ ├── refresh/route.ts
-│ │ │ └── controller.ts
-│ │ │
-│ │ ├── users/
-│ │ │ ├── me/route.ts
-│ │ │ └── controller.ts
-│ │ │
-│ │ ├── certificates/
-│ │ │ ├── issue/route.ts
-│ │ │ ├── verify/route.ts
-│ │ │ ├── list/route.ts
-│ │ │ └── controller.ts
-│ │ │
-│ │ ├── blockchain/
-│ │ │ ├── write/route.ts
-│ │ │ ├── read/route.ts
-│ │ │ └── controller.ts
-│ │ │
-│ │ ├── ml/
-│ │ │ ├── detect/route.ts
-│ │ │ └── controller.ts
-│ │ │
-│ │ ├── middlewares/
-│ │ │ ├── requireAuth.ts
-│ │ │ ├── validate.ts
-│ │ │ └── upload.ts
-│ │ │
-│ │ ├── services/
-│ │ │ ├── auth-service.ts
-│ │ │ ├── user-service.ts
-│ │ │ ├── certificate-service.ts
-│ │ │ ├── blockchain-service.ts
-│ │ │ └── ml-service.ts
-│ │ │
-│ │ ├── db/
-│ │ │ ├── prisma.ts
-│ │ │ └── models.ts
-│ │ │
-│ │ ├── utils/
-│ │ │ ├── jwt.ts
-│ │ │ ├── hash.ts
-│ │ │ ├── responses.ts
-│ │ │ └── errors.ts
-│ │ │
-│ │ └── types/
-│ │ ├── auth.ts
-│ │ ├── certificate.ts
-│ │ └── user.ts
-│ │
-│ ├── page.tsx
-│ ├── layout.tsx
-│ ├── signin/page.tsx
-│ └── signup/page.tsx
-│
-├── prisma/
-├── components/
-├── lib/
-├── public/
-└── .env
-
+|:---|:---|
+| **🔒 Secure Authentication** | Robust JWT-based auth with NextAuth, Google OAuth, and custom credentials. |
+| **🎓 Smart Issuance** | Drag-and-drop certificate generation with dynamic PDF rendering. |
+| **⛓️ Blockchain Anchor** | Every certificate is hashed and anchored to the blockchain for verifiable proof of existence. |
+| **🤖 AI Verification** | Automated optical character recognition (OCR) and tamper detection for uploaded certificates. |
+| **🕸️ Public Verify API** | Public-facing pages to instantly verify credentials via ID or QR code. |
+| **📊 Analytics Dashboard** | Real-time insights into issued, verified, and active certificates via interactive charts. |
+| **🎨 Premium UI/UX** | Stunning glassmorphism interface built with Tailwind v4 and shadcn/ui. |
 
 ---
 
 ## 🛠️ Tech Stack
 
-### **Frontend**
-- ⚡ Next.js 14 (App Router)
-- 🎨 Tailwind CSS + shadcn/UI
-- 🧩 Zustand / Context
-- ✨ Framer Motion
+### Core Framework
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router, Server Actions)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Library**: [React 19](https://react.dev/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/)
 
-### **Backend (Inside Next.js API)**
-- 🛠️ Controller → Service → DB Pattern
-- 🔐 JWT Authentication
-- 📦 Prisma ORM
-- 🧪 Zod Validation
-- 🔄 Server Actions (optional)
+### Backend & Data
+- **Database**: PostgreSQL
+- **ORM**: [Prisma](https://www.prisma.io/)
+- **Auth**: NextAuth.js / Custom JWT
+- **Validation**: Zod
 
-### **AI + Blockchain**
-- 🧠 ML Fraud Detector (custom module)
-- ⛓️ Blockchain Hash Storage (SHA-256 hashing → Blockchain Service)
+### Advanced Tech
+- **Blockchain**: SHA-256 Hashing / Ledger Service
+- **AI/ML**: OpenCV / Tesseract (OCR Integration)
+- **Storage**: AWS S3 / Local Secure Storage
 
 ---
 
 ## 🚀 Getting Started
 
-### 1️⃣ Install dependencies
+Follow these steps to set up the project locally.
+
+### Prerequisites
+- Node.js 18+
+- PostgreSQL Database
+
+### Installation
+
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/yourusername/trueledger.git
+    cd trueledger
+    ```
+
+2.  **Install dependencies**
+    ```bash
+    npm install
+    # or
+    yarn install
+    # or
+    pnpm install
+    ```
+
+3.  **Environment Setup**
+    Create a `.env` file in the root directory and add the following variables:
+
+    ```env
+    # Database (PostgreSQL)
+    DATABASE_URL="postgresql://user:password@localhost:5432/trueledger"
+
+    # Authentication
+    NEXTAUTH_URL="http://localhost:3000"
+    NEXTAUTH_SECRET="your-super-secret-key-at-least-32-chars"
+    JWT_SECRET="your-jwt-secret-key"
+
+    # Google OAuth (Optional)
+    GOOGLE_CLIENT_ID="your-google-client-id"
+    GOOGLE_CLIENT_SECRET="your-google-client-secret"
+    
+    # Blockchain / API (If applicable)
+    BLOCKCHAIN_ENDPOINT="http://localhost:8545"
+    ```
+
+4.  **Database Migration**
+    Initialize your database schema with Prisma.
+    ```bash
+    npx prisma migrate dev --name init
+    ```
+
+5.  **Run Development Server**
+    ```bash
+    npm run dev
+    ```
+
+    Open [http://localhost:3000](http://localhost:3000) to see the application.
+
+---
+
+## 📁 Project Structure
+
 ```bash
-npm install
+trueledger/
+├── app/
+│   ├── api/            # API Routes (Auth, Certificates, Blockchain)
+│   ├── dashboard/      # Protected Dashboard Pages
+│   ├── verify/         # Public Verification Pages
+│   ├── (auth)/         # Auth Pages (Signin/Signup)
+│   └── page.tsx        # Landing Page
+├── components/         # Reusable UI Components
+├── lib/                # Utilities, Hooks, and Context
+├── prisma/             # Database Schema
+└── public/             # Static Assets
 ```
-### 2️⃣ Setup environment variables
-Create .env:
-```bash
-DATABASE_URL=Your Prisma DB URL
-JWT_SECRET=your-secret
-BLOCKCHAIN_ENDPOINT=your-blockchain-endpoint
-```
-### 3️⃣ Prisma Migration
-```bash
-npx prisma migrate dev
-```
-### 4️⃣ Run development server
-```bash
-npm run dev
-```
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request for any enhancements or bug fixes.
+
+---
+
+<p align="center">
+  Built with ❤️ by Pranay
+</p>
