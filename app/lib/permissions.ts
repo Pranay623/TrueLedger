@@ -11,5 +11,5 @@ export type PermissionCheckUser = {
 };
 
 export function isInstitutionAdmin(user: PermissionCheckUser) {
-  return user.usertype === "INSTITUTION" && user.admin === true;
+  return user.usertype === "INSTITUTION";
 }

@@ -1,10 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useAuth } from "@/lib/auth-context";
+import { Modal } from "@/components/ui/modal";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Loader2, XCircle, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import {
     Download,
@@ -61,6 +65,8 @@ interface TimelineEvent {
 }
 
 export default function CertificatePage() {
+    const { user } = useAuth();
+    const router = useRouter();
     const params = useParams();
     const id = params.id as string;
 
@@ -73,6 +79,54 @@ export default function CertificatePage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [imageLoaded, setImageLoaded] = useState(false);
+
+    // Admin Action States
+    const [approveId, setApproveId] = useState<string | null>(null);
+    const [rejectId, setRejectId] = useState<string | null>(null);
+    const [rejectReason, setRejectReason] = useState("");
+    const [actionLoading, setActionLoading] = useState(false);
+
+    const isInstitutionAdmin = user?.usertype === "INSTITUTION" && (data?.owner?.institutionname === user?.institutionname || user?.admin);
+
+    const onApprove = async () => {
+        setActionLoading(true);
+        try {
+            const res = await fetch(`/api/admin/certificates/${id}/approve`, { method: "POST" });
+            if (res.ok) {
+                window.location.reload();
+            } else {
+                alert("Failed to approve");
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Error");
+        } finally {
+            setActionLoading(false);
+            setApproveId(null);
+        }
+    };
+
+    const onReject = async () => {
+        setActionLoading(true);
+        try {
+            const res = await fetch(`/api/admin/certificates/${id}/reject`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ reason: rejectReason })
+            });
+            if (res.ok) {
+                window.location.reload();
+            } else {
+                alert("Failed to reject");
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Error");
+        } finally {
+            setActionLoading(false);
+            setRejectId(null);
+        }
+    };
 
     const handleDownload = async () => {
         if (!data) return;
@@ -460,6 +514,59 @@ export default function CertificatePage() {
                     </div>
                 </div>
             </div>
+            {/* Approve Modal */}
+            <Modal
+                isOpen={!!approveId}
+                onClose={() => setApproveId(null)}
+                title="Approve Certificate"
+                footer={
+                    <>
+                        <Button variant="outline" onClick={() => setApproveId(null)} disabled={actionLoading}>Cancel</Button>
+                        <Button className="bg-emerald-600 hover:bg-emerald-500" onClick={onApprove} disabled={actionLoading}>
+                            {actionLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <CheckCircle className="w-4 h-4 mr-2" />}
+                            Approve
+                        </Button>
+                    </>
+                }
+            >
+                <div className="space-y-4">
+                    <p className="text-gray-300">
+                        Are you sure you want to approve this certificate?
+                    </p>
+                    <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-3 flex gap-3 text-sm text-emerald-300">
+                        <ShieldCheck className="w-5 h-5 shrink-0" />
+                        <p>This action will generate a permanent verification hash on the blockchain simulation.</p>
+                    </div>
+                </div>
+            </Modal>
+
+            {/* Reject Modal */}
+            <Modal
+                isOpen={!!rejectId}
+                onClose={() => setRejectId(null)}
+                title="Reject Certificate"
+                footer={
+                    <>
+                        <Button variant="outline" onClick={() => setRejectId(null)} disabled={actionLoading}>Cancel</Button>
+                        <Button variant="destructive" onClick={onReject} disabled={actionLoading}>
+                            {actionLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <XCircle className="w-4 h-4 mr-2" />}
+                            Reject
+                        </Button>
+                    </>
+                }
+            >
+                <div className="space-y-4">
+                    <p className="text-gray-300">
+                        Please provide a reason for rejecting this certificate.
+                    </p>
+                    <Input
+                        value={rejectReason}
+                        onChange={(e) => setRejectReason(e.target.value)}
+                        placeholder="Reason for rejection..."
+                        className="bg-black/40 border-gray-700"
+                    />
+                </div>
+            </Modal>
         </div>
     );
 }

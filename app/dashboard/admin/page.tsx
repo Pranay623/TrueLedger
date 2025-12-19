@@ -44,20 +44,26 @@ export default function AdminDashboardPage() {
     }, [user, authLoading, router]);
 
 
+
+    const [pendingCerts, setPendingCerts] = useState<any[]>([]);
+
     useEffect(() => {
-        async function fetchStats() {
+        async function fetchData() {
             try {
-                const res = await fetch("/api/admin/dashboard/stats");
-                if (!res.ok) {
-                    if (res.status === 403) {
-                        setError("Access Denied: Admin permissions required.");
-                    } else {
-                        setError("Failed to load admin statistics.");
-                    }
-                    return;
+                // Fetch Stats
+                const statsRes = await fetch("/api/admin/dashboard/stats");
+                if (statsRes.ok) {
+                    const statsData = await statsRes.json();
+                    setStats(statsData);
                 }
-                const data = await res.json();
-                setStats(data);
+
+                // Fetch Pending Certificates
+                const pendingRes = await fetch("/api/admin/certificates/pending?limit=5");
+                if (pendingRes.ok) {
+                    const pendingData = await pendingRes.json();
+                    setPendingCerts(pendingData.data);
+                }
+
             } catch (err) {
                 setError("Network error. Please try again.");
             } finally {
@@ -66,9 +72,9 @@ export default function AdminDashboardPage() {
         }
 
         if (user && user.usertype === "INSTITUTION") {
-            fetchStats();
+            fetchData();
         } else if (!authLoading && !user) {
-            setLoading(false); // Stop loading if no user
+            setLoading(false);
         }
     }, [user, authLoading]);
 
@@ -141,6 +147,47 @@ export default function AdminDashboardPage() {
                 />
             </div>
 
+            {/* Pending Approvals Section */}
+            {pendingCerts.length > 0 && (
+                <Card className="bg-gray-900/30 border-gray-800 backdrop-blur-sm">
+                    <CardHeader className="flex flex-row items-center justify-between">
+                        <div>
+                            <CardTitle>Recent Pending Approvals</CardTitle>
+                            <CardDescription>Latest certificates awaiting verification</CardDescription>
+                        </div>
+                        <Link href="/dashboard/admin/certificates?status=PENDING">
+                            <Button variant="ghost" size="sm" className="text-emerald-400 hover:text-emerald-300 hover:bg-emerald-900/20">
+                                View All <TrendingUp className="w-4 h-4 ml-2" />
+                            </Button>
+                        </Link>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-4">
+                            {pendingCerts.map((cert) => (
+                                <div key={cert.id} className="flex items-center justify-between p-4 rounded-lg bg-black/20 border border-gray-800/50 hover:border-emerald-500/20 transition-colors">
+                                    <div className="flex items-center gap-4">
+                                        <div className="p-2 rounded-full bg-yellow-500/10 text-yellow-500">
+                                            <Clock className="w-5 h-5" />
+                                        </div>
+                                        <div>
+                                            <h4 className="text-sm font-medium text-white">{cert.title}</h4>
+                                            <p className="text-xs text-gray-400">Issued to {cert.owner.fullName} • {new Date(cert.createdAt).toLocaleDateString()}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <Link href={`/dashboard/admin/certificates`}>
+                                            <Button size="sm" variant="outline" className="border-gray-700 hover:bg-gray-800 text-gray-300">
+                                                Review
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+            )}
+
             {/* Detailed Breakdown */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Card className="bg-gray-900/30 border-gray-800 backdrop-blur-sm">
@@ -168,7 +215,7 @@ export default function AdminDashboardPage() {
                                 Issue New
                             </Button>
                         </Link>
-                        <Link href="/dashboard/certificates?status=PENDING">
+                        <Link href="/dashboard/admin/certificates?status=PENDING">
                             <Button variant="secondary" className="w-full h-24 flex flex-col gap-2">
                                 <Clock className="w-6 h-6" />
                                 Review Pending

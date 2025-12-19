@@ -1,6 +1,7 @@
 "use client"
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react"
+import { useSession } from "next-auth/react"
 import { authApi, getErrorMessage } from "./auth-api"
 import { sessionManager, userManager } from "./auth-utils"
 import {
@@ -29,6 +30,8 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const { data: session, status: sessionStatus } = useSession()
+
   const [state, setState] = useState<AuthState>({
     user: null,
     token: null,
@@ -38,6 +41,46 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   })
   const [error, setError] = useState<string | null>(null)
 
+  // Keep AuthContext in sync for Google/NextAuth logins.
+  // (Email/JWT logins are already handled via userManager + refreshSession.)
+  useEffect(() => {
+    if (sessionStatus === "loading") return
+
+    if (sessionStatus !== "authenticated" || !session?.user) {
+      return
+    }
+
+    const sessionUser = session.user as any
+    const nextAuthUser: User = {
+      id: sessionUser.id,
+      email: sessionUser.email ?? "",
+      username: sessionUser.username ?? sessionUser.name ?? (sessionUser.email ? String(sessionUser.email).split("@")[0] : ""),
+      fullName: sessionUser.name ?? null,
+      usertype: sessionUser.usertype ?? null,
+      institutionname: sessionUser.institutionname ?? null,
+      admin: sessionUser.admin ?? false,
+    }
+
+    // Avoid clobbering an already-populated user (e.g. JWT login) unless usertype is missing.
+    setState(prev => {
+      if (prev.user?.usertype) {
+        return { ...prev, isLoading: false, isAuthenticated: true }
+      }
+
+      return {
+        ...prev,
+        user: nextAuthUser,
+        token: null,
+        refreshToken: null,
+        isLoading: false,
+        isAuthenticated: true,
+      }
+    })
+
+    // Cache for UI (used by sidebar/layouts) similar to JWT flows.
+    userManager.setUser(nextAuthUser)
+  }, [sessionStatus, session])
+
   useEffect(() => {
     const initializeAuth = () => {
       try {
@@ -46,7 +89,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
         // Note: We can't check token validity client-side anymore since tokens are HttpOnly
         // The server will validate the HttpOnly cookie on API requests
-        if (user) {
+        if (user && user.usertype) {
           setState({
             user,
             token: null, // Token is in HttpOnly cookie
@@ -55,13 +98,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             isAuthenticated: true
           })
         } else {
-          setState({
-            user: null,
-            token: null,
-            refreshToken: null,
-            isLoading: false,
-            isAuthenticated: false
-          })
+          // Attempt to refresh session from server (in case HttpOnly cookies exist but local storage is empty or invalid)
+          refreshSession().then(success => {
+            if (!success) {
+              setState({
+                user: null,
+                token: null,
+                refreshToken: null,
+                isLoading: false,
+                isAuthenticated: false
+              })
+            }
+          });
         }
       } catch (error) {
         console.error("Error initializing auth:", error)
@@ -230,16 +278,36 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setError(null)
   }
 
+
   const refreshSession = async (): Promise<boolean> => {
     try {
       // With HttpOnly cookies, we can't validate tokens client-side
       // We need to make a request to the server to check if the session is still valid
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/getprofile` || "http://localhost:8000/api/users/getprofile", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me` || "http://localhost:8000/api/users/me", {
         method: 'GET',
         credentials: 'include' // Include cookies in request
       })
 
       if (response.ok) {
+        const data = await response.json();
+        // Endpoint /api/users/me returns { user: ... }
+        const user = data.user;
+
+        setState(prev => ({
+          ...prev,
+          user: {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            usertype: user.usertype,
+            institutionname: user.institutionname,
+            admin: user.admin
+          },
+          isLoading: false,
+          isAuthenticated: true
+        }));
+
+        userManager.setUser(user);
         return true
       } else if (response.status === 401) {
         // Token expired or invalid

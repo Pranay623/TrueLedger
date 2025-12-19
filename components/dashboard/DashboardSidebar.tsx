@@ -1,9 +1,11 @@
 "use client";
 
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth-context";
+import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -65,11 +67,33 @@ export default function DashboardSidebar({ className }: SidebarProps) {
   }, []);
 
   // Inject dynamic badge for certificates
-  const navigationItems = navigationItemsBase.map((item) =>
+  let navigationItems = navigationItemsBase.map((item) =>
     item.title === "Certificates"
       ? { ...item, badge: certificateCount ?? undefined }
       : item
   );
+
+  // Custom Override for Admin
+  // We need to access the user context here, but DashboardSidebar is used in Layout which is used in ProtectedRoute.
+  // We can try to get user from useAuth if available, or just check local storage/cookie if strictly needed client side.
+  // Better yet, let's just use the client side auth context.
+
+  const { user } = useAuth();
+  console.log("DashboardSidebar user:", user);
+  console.log("user type:", user?.usertype);
+
+  // AuthContext is populated for email/JWT logins.
+  // NextAuth session is populated for Google logins.
+  const { data: session } = useSession();
+  const usertype = user?.usertype ?? (session?.user as any)?.usertype;
+
+  if (usertype === "INSTITUTION") {
+    navigationItems = navigationItems.map(item => {
+      if (item.title === "Overview") return { ...item, href: "/dashboard/admin" };
+      if (item.title === "Certificates") return { ...item, href: "/dashboard/admin/certificates" };
+      return item;
+    });
+  }
 
   return (
     <aside
