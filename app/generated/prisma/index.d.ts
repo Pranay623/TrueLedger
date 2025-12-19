@@ -1386,7 +1386,7 @@ export namespace Prisma {
     id: string
     email: string
     username: string
-    password: string
+    password: string | null
     fullName: string | null
     securityId: string
     admin: boolean
@@ -1523,7 +1523,7 @@ export namespace Prisma {
       id: string
       email: string
       username: string
-      password: string
+      password: string | null
       fullName: string | null
       securityId: string
       admin: boolean
@@ -4901,7 +4901,7 @@ export namespace Prisma {
     id?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     username?: StringFilter<"User"> | string
-    password?: StringFilter<"User"> | string
+    password?: StringNullableFilter<"User"> | string | null
     fullName?: StringNullableFilter<"User"> | string | null
     securityId?: StringFilter<"User"> | string
     admin?: BoolFilter<"User"> | boolean
@@ -4923,7 +4923,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     username?: SortOrder
-    password?: SortOrder
+    password?: SortOrderInput | SortOrder
     fullName?: SortOrderInput | SortOrder
     securityId?: SortOrder
     admin?: SortOrder
@@ -4949,7 +4949,7 @@ export namespace Prisma {
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
-    password?: StringFilter<"User"> | string
+    password?: StringNullableFilter<"User"> | string | null
     fullName?: StringNullableFilter<"User"> | string | null
     admin?: BoolFilter<"User"> | boolean
     avatar?: StringNullableFilter<"User"> | string | null
@@ -4970,7 +4970,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     username?: SortOrder
-    password?: SortOrder
+    password?: SortOrderInput | SortOrder
     fullName?: SortOrderInput | SortOrder
     securityId?: SortOrder
     admin?: SortOrder
@@ -4998,7 +4998,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
     username?: StringWithAggregatesFilter<"User"> | string
-    password?: StringWithAggregatesFilter<"User"> | string
+    password?: StringNullableWithAggregatesFilter<"User"> | string | null
     fullName?: StringNullableWithAggregatesFilter<"User"> | string | null
     securityId?: StringWithAggregatesFilter<"User"> | string
     admin?: BoolWithAggregatesFilter<"User"> | boolean
@@ -5169,7 +5169,7 @@ export namespace Prisma {
     id?: string
     email: string
     username: string
-    password: string
+    password?: string | null
     fullName?: string | null
     securityId: string
     admin?: boolean
@@ -5191,7 +5191,7 @@ export namespace Prisma {
     id?: string
     email: string
     username: string
-    password: string
+    password?: string | null
     fullName?: string | null
     securityId: string
     admin?: boolean
@@ -5213,7 +5213,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     securityId?: StringFieldUpdateOperationsInput | string
     admin?: BoolFieldUpdateOperationsInput | boolean
@@ -5235,7 +5235,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     securityId?: StringFieldUpdateOperationsInput | string
     admin?: BoolFieldUpdateOperationsInput | boolean
@@ -5257,7 +5257,7 @@ export namespace Prisma {
     id?: string
     email: string
     username: string
-    password: string
+    password?: string | null
     fullName?: string | null
     securityId: string
     admin?: boolean
@@ -5277,7 +5277,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     securityId?: StringFieldUpdateOperationsInput | string
     admin?: BoolFieldUpdateOperationsInput | boolean
@@ -5297,7 +5297,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     securityId?: StringFieldUpdateOperationsInput | string
     admin?: BoolFieldUpdateOperationsInput | boolean
@@ -6448,7 +6448,7 @@ export namespace Prisma {
     id?: string
     email: string
     username: string
-    password: string
+    password?: string | null
     fullName?: string | null
     securityId: string
     admin?: boolean
@@ -6469,7 +6469,7 @@ export namespace Prisma {
     id?: string
     email: string
     username: string
-    password: string
+    password?: string | null
     fullName?: string | null
     securityId: string
     admin?: boolean
@@ -6532,7 +6532,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     securityId?: StringFieldUpdateOperationsInput | string
     admin?: BoolFieldUpdateOperationsInput | boolean
@@ -6553,7 +6553,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     securityId?: StringFieldUpdateOperationsInput | string
     admin?: BoolFieldUpdateOperationsInput | boolean
@@ -6623,7 +6623,7 @@ export namespace Prisma {
     id?: string
     email: string
     username: string
-    password: string
+    password?: string | null
     fullName?: string | null
     securityId: string
     admin?: boolean
@@ -6644,7 +6644,7 @@ export namespace Prisma {
     id?: string
     email: string
     username: string
-    password: string
+    password?: string | null
     fullName?: string | null
     securityId: string
     admin?: boolean
@@ -6720,7 +6720,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     securityId?: StringFieldUpdateOperationsInput | string
     admin?: BoolFieldUpdateOperationsInput | boolean
@@ -6741,7 +6741,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     securityId?: StringFieldUpdateOperationsInput | string
     admin?: BoolFieldUpdateOperationsInput | boolean

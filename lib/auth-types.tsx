@@ -26,6 +26,8 @@ export interface AuthResponse {
     id: string
     email: string
     username: string
+    usertype?: Role | null
+    institutionname?: string | null
   }
 }
 
@@ -77,15 +79,15 @@ export const signupSchema = z.object({
     .string()
     .optional()
 })
-.refine((data) => {
-  if (data.usertype === "INSTITUTION") {
-    return data.institutionname && data.institutionname.trim().length > 0
-  }
-  return true
-}, {
-  message: "Institution name is required for institution accounts",
-  path: ["institutionname"]
-})
+  .refine((data) => {
+    if (data.usertype === "INSTITUTION") {
+      return data.institutionname && data.institutionname.trim().length > 0
+    }
+    return true
+  }, {
+    message: "Institution name is required for institution accounts",
+    path: ["institutionname"]
+  })
 
 export const googleAuthSchema = z.object({
   idToken: z.string().min(1, "Google ID token is required")

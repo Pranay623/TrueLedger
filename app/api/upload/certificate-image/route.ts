@@ -52,6 +52,7 @@ export async function POST(req: Request) {
         message: "Upload successful",
         fileUrl,
         fileType: file.type,
+        s3Key: key,
       },
       { status: 201 }
     );

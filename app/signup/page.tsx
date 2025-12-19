@@ -40,6 +40,13 @@ export default function SignupPage() {
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const router = useRouter();
+  const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+
+  React.useEffect(() => {
+    if (searchParams && searchParams.get("error") === "AccountNotFound") {
+      setError("No account found. Please create an account to continue.");
+    }
+  }, []);
 
   const {
     register,
@@ -265,11 +272,10 @@ export default function SignupPage() {
                   <button
                     type="button"
                     onClick={() => setUserType("INSTITUTION")}
-                    className={`flex items-center justify-center space-x-2 py-2 px-3 rounded-md text-sm font-medium transition-all ${
-                      userType === "INSTITUTION"
-                        ? "bg-emerald-700/20 text-emerald-300 shadow-sm"
-                        : "text-gray-400 hover:text-white"
-                    }`}
+                    className={`flex items-center justify-center space-x-2 py-2 px-3 rounded-md text-sm font-medium transition-all ${userType === "INSTITUTION"
+                      ? "bg-emerald-700/20 text-emerald-300 shadow-sm"
+                      : "text-gray-400 hover:text-white"
+                      }`}
                   >
                     <Building className="w-4 h-4" />
                     <span>Institution</span>
@@ -277,11 +283,10 @@ export default function SignupPage() {
                   <button
                     type="button"
                     onClick={() => setUserType("STUDENT")}
-                    className={`flex items-center justify-center space-x-2 py-2 px-3 rounded-md text-sm font-medium transition-all ${
-                      userType === "STUDENT"
-                        ? "bg-emerald-700/20 text-emerald-300 shadow-sm"
-                        : "text-gray-400 hover:text-white"
-                    }`}
+                    className={`flex items-center justify-center space-x-2 py-2 px-3 rounded-md text-sm font-medium transition-all ${userType === "STUDENT"
+                      ? "bg-emerald-700/20 text-emerald-300 shadow-sm"
+                      : "text-gray-400 hover:text-white"
+                      }`}
                   >
                     <GraduationCap className="w-4 h-4" />
                     <span>Student</span>
@@ -300,14 +305,28 @@ export default function SignupPage() {
                 <div className="space-y-3">
                   <Button
                     variant="outline"
-                    className="w-full h-11 text-emerald-300 border border-emerald-800/30"
+                    className="w-full h-11 text-emerald-300 border border-emerald-800/30 hover:bg-emerald-900/10 hover:border-emerald-500/50 transition-all duration-300"
                     type="button"
-                    onClick={() =>
+                    onClick={() => {
+                      const currentInstitutionName = watch("institutionname");
+
+                      if (userType === "INSTITUTION" && !currentInstitutionName) {
+                        setError("Please enter your Institution Name before continuing with Google");
+                        return;
+                      }
+
+                      // Set cookie to remember user type selection
+                      document.cookie = `signup-usertype=${encodeURIComponent(userType)}; path=/; max-age=300; SameSite=Lax`; // 5 mins
+
+                      if (userType === "INSTITUTION") {
+                        document.cookie = `signup-institutionname=${encodeURIComponent(currentInstitutionName || "")}; path=/; max-age=300; SameSite=Lax`;
+                      }
+
                       signIn("google", {
                         callbackUrl: "/dashboard",
-                      })
-                    }
->
+                      });
+                    }}
+                  >
                     {/* Google SVG */}
                     <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="none" aria-hidden>
                       <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />

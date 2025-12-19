@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     )
   }
 
-    // Fetch user with password
+  // Fetch user with password
   const user = await prisma.user.findUnique({
     where: { id: auth.user.id },
     select: {
@@ -35,6 +35,13 @@ export async function POST(req: Request) {
     return NextResponse.json(
       { message: "User not found" },
       { status: 404 }
+    )
+  }
+
+  if (!user.password) {
+    return NextResponse.json(
+      { message: "You are logged in with a social account. You cannot change password here." },
+      { status: 400 }
     )
   }
 

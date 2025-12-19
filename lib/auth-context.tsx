@@ -3,13 +3,13 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react"
 import { authApi, getErrorMessage } from "./auth-api"
 import { sessionManager, userManager } from "./auth-utils"
-import { 
-  AuthState, 
-  User, 
-  SigninFormData, 
-  SignupFormData, 
-  GoogleAuthData, 
-  AuthResponse 
+import {
+  AuthState,
+  User,
+  SigninFormData,
+  SignupFormData,
+  GoogleAuthData,
+  AuthResponse
 } from "./auth-types"
 
 interface AuthContextType extends AuthState {
@@ -43,7 +43,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       try {
         // Check if user data exists in client-accessible cookie
         const user = userManager.getUser()
-        
+
         // Note: We can't check token validity client-side anymore since tokens are HttpOnly
         // The server will validate the HttpOnly cookie on API requests
         if (user) {
@@ -85,16 +85,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     try {
       const response = await authApi.signin(data)
-      
+
       // Note: Cookies are automatically set by the server via Set-Cookie header
       // We only need to update the client state with user info
       // The tokens are now in HttpOnly cookies and not accessible to JavaScript
-      
+
       setState({
         user: {
           id: response.user.id,
           email: response.user.email,
-          username: response.user.username
+          username: response.user.username,
+          usertype: response.user.usertype,
+          institutionname: response.user.institutionname
         },
         token: null, // Token is now in HttpOnly cookie
         refreshToken: null, // Refresh token is now in HttpOnly cookie
@@ -106,7 +108,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       userManager.setUser({
         id: response.user.id,
         email: response.user.email,
-        username: response.user.username
+        username: response.user.username,
+        usertype: response.user.usertype,
+        institutionname: response.user.institutionname
       })
 
       return response
@@ -124,15 +128,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     try {
       const response = await authApi.signup(data)
-      
+
       // Note: Cookies are automatically set by the server via Set-Cookie header
       // We only need to update the client state with user info
-      
+
       setState({
         user: {
           id: response.user.id,
           email: response.user.email,
-          username: response.user.username
+          username: response.user.username,
+          usertype: response.user.usertype,
+          institutionname: response.user.institutionname
         },
         token: null, // Token is now in HttpOnly cookie
         refreshToken: null, // Refresh token is now in HttpOnly cookie
@@ -144,7 +150,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       userManager.setUser({
         id: response.user.id,
         email: response.user.email,
-        username: response.user.username
+        username: response.user.username,
+        usertype: response.user.usertype,
+        institutionname: response.user.institutionname
       })
 
       return response
@@ -162,15 +170,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     try {
       const response = await authApi.googleAuth(data)
-      
+
       // Note: Cookies are automatically set by the server via Set-Cookie header
       // We only need to update the client state with user info
-      
+
       setState({
         user: {
           id: response.user.id,
           email: response.user.email,
-          username: response.user.username
+          username: response.user.username,
+          usertype: response.user.usertype,
+          institutionname: response.user.institutionname
         },
         token: null, // Token is now in HttpOnly cookie
         refreshToken: null, // Refresh token is now in HttpOnly cookie
@@ -182,7 +192,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       userManager.setUser({
         id: response.user.id,
         email: response.user.email,
-        username: response.user.username
+        username: response.user.username,
+        usertype: response.user.usertype,
+        institutionname: response.user.institutionname
       })
 
       return response
@@ -205,7 +217,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.error('Logout API call failed:', error)
       // Continue with client-side cleanup even if server call fails
     }
-    
+
     // Clear client-side user data
     userManager.removeUser()
     setState({
@@ -226,7 +238,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         method: 'GET',
         credentials: 'include' // Include cookies in request
       })
-      
+
       if (response.ok) {
         return true
       } else if (response.status === 401) {
@@ -275,7 +287,7 @@ export const useAuth = (): AuthContextType => {
 
 export const useAuthForm = () => {
   const { signin, signup, googleAuth, isLoading, error, clearError } = useAuth()
-  
+
   return {
     signin,
     signup,
@@ -288,7 +300,7 @@ export const useAuthForm = () => {
 
 export const useAuthState = () => {
   const { user, token, isAuthenticated, isLoading } = useAuth()
-  
+
   return {
     user,
     token,
@@ -299,7 +311,7 @@ export const useAuthState = () => {
 
 export const useAuthActions = () => {
   const { signout, refreshSession, clearError } = useAuth()
-  
+
   return {
     signout,
     refreshSession,

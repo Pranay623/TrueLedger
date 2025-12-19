@@ -18,10 +18,14 @@ import {
   ArrowRight,
   Plus,
   Download,
-  TrendingUp
+  TrendingUp,
+  Settings
 } from "lucide-react";
+import Link from "next/link";
+import { useAuth } from "@/lib/auth-context";
 
 export default function DashboardPage() {
+  const { user } = useAuth();
   return (
     <>
       <DashboardHeader
@@ -55,6 +59,15 @@ export default function DashboardPage() {
             <FileText className="w-5 h-5 mr-2" />
             Generate Report
           </Button>
+
+          {user?.usertype === "INSTITUTION" && (
+            <Link href="/dashboard/admin" className="contents">
+              <Button className="h-16 bg-gradient-to-br from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium shadow-lg shadow-purple-900/20 border border-purple-500/30">
+                <Settings className="w-5 h-5 mr-2" />
+                Admin Dashboard
+              </Button>
+            </Link>
+          )}
         </div>
 
         {/* Main Grid */}

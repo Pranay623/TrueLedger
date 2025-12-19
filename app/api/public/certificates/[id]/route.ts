@@ -36,6 +36,8 @@ export async function GET(
       issuedBy: certificate.owner.institutionname,
       ownerName: certificate.owner.fullName,
       createdAt: certificate.createdAt,
+      fileUrl: certificate.fileUrl,
+      fileType: certificate.fileType,
     });
   } catch (error) {
     console.error("Public verify error:", error);

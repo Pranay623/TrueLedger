@@ -26,6 +26,7 @@ export async function GET(
 
     const certificate = await prisma.certificate.findUnique({
       where: { id: certificateId },
+      include: { owner: true },
     });
 
     if (!certificate) {
