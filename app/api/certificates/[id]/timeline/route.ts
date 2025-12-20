@@ -15,10 +15,13 @@ export async function GET(
 
     const certificate = await prisma.certificate.findUnique({
       where: { id: certificateId },
-      select: {
-        id: true,
-        ownerId: true,
-      },
+      include: {
+        owner: {
+          select: {
+            institutionname: true
+          }
+        }
+      }
     });
 
     if (!certificate) {
@@ -28,8 +31,13 @@ export async function GET(
       );
     }
 
-    // 🔐 Owner-only access
-    if (certificate.ownerId !== user.id) {
+    // 🔐 Access Check
+    const isOwner = certificate.ownerId === user.id;
+    const isAdmin = user.usertype === "INSTITUTION" &&
+      user.admin === true &&
+      user.institutionname === certificate.owner.institutionname;
+
+    if (!isOwner && !isAdmin) {
       return NextResponse.json(
         { message: "Access denied" },
         { status: 403 }

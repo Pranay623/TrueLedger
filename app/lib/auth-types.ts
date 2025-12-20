@@ -21,7 +21,7 @@ export interface User {
 
 export interface AuthResponse {
   message: string
-  token: string 
+  token: string
   refreshToken: string
   user: {
     id: string
@@ -36,7 +36,7 @@ export interface ApiError {
   status: number
   errors?: Array<{
     field: string
-    message: string 
+    message: string
   }>
 }
 
@@ -92,16 +92,14 @@ export const signupSchema = z.object({
     .string()
     .optional()
 })
-// Refine is used for cross-field validation
-.refine((data) => {
-  if (data.usertype === Role.INSTITUTION) {
+  // Refine is used for cross-field validation
+  .refine((data) => {
+    // Require institution name for both types
     return data.institutionname && data.institutionname.trim().length > 0
-  }
-  return true
-}, {
-  message: "Institution name is required for institution accounts",
-  path: ["institutionname"] 
-})
+  }, {
+    message: "Institution name is required",
+    path: ["institutionname"]
+  })
 
 export const googleAuthSchema = z.object({
   idToken: z.string().min(1, "Google ID token is required")

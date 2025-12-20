@@ -198,7 +198,7 @@ export default function AdminDashboardPage() {
                 <Button variant="outline" className="border-emerald-900/30 text-emerald-400 hover:bg-emerald-900/20">
                     <Download className="w-4 h-4 mr-2" /> Export Report
                 </Button>
-                <Button
+                {/* <Button
                     variant="destructive"
                     onClick={() => {
                         // Clear local storage explicitly here as well just to be safe
@@ -214,7 +214,7 @@ export default function AdminDashboardPage() {
                     className="bg-red-900/20 text-red-400 border border-red-900/30 hover:bg-red-900/40"
                 >
                     <LogOut className="w-4 h-4 mr-2" /> Logout
-                </Button>
+                </Button> */}
             </DashboardHeader>
 
             <div className="space-y-8 p-6">

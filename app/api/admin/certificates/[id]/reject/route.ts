@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import  prisma  from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth";
 import { isInstitutionAdmin } from "@/app/lib/permissions";
 
@@ -26,7 +26,7 @@ export async function POST(
       },
     });
 
-     if (!admin) {
+    if (!admin) {
       return NextResponse.json(
         { message: "User not found" },
         { status: 404 }
@@ -49,7 +49,25 @@ export async function POST(
 
     const certificate = await prisma.certificate.findUnique({
       where: { id },
+      include: { owner: true },
     });
+
+    if (!certificate) {
+      return NextResponse.json(
+        { message: "Certificate not found" },
+        { status: 404 }
+      );
+    }
+
+    if (
+      admin.institutionname &&
+      certificate.owner.institutionname !== admin.institutionname
+    ) {
+      return NextResponse.json(
+        { message: "Institution mismatch" },
+        { status: 403 }
+      );
+    }
 
     if (!certificate) {
       return NextResponse.json(

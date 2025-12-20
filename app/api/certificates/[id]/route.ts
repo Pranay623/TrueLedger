@@ -36,7 +36,13 @@ export async function GET(
       );
     }
 
-    if (certificate.ownerId !== user.id) {
+    // 🔐 Access Check
+    const isOwner = certificate.ownerId === user.id;
+    const isAdmin = user.usertype === "INSTITUTION" &&
+      user.admin === true &&
+      user.institutionname === certificate.owner.institutionname;
+
+    if (!isOwner && !isAdmin) {
       return NextResponse.json(
         { message: "Access denied" },
         { status: 403 }

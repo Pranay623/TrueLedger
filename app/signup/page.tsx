@@ -412,21 +412,22 @@ export default function SignupPage() {
                     {errors.username && <p className="text-sm text-red-600">{errors.username.message}</p>}
                   </div>
 
-                  {(userType === "INSTITUTION" || watchedUsertype === "INSTITUTION") && (
-                    <div className="space-y-2">
-                      <Label htmlFor="institution" className="text-sm font-medium text-gray-300">Institution Name</Label>
-                      <div className="relative">
-                        <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                        <Input
-                          id="institution"
-                          placeholder="Harvard University"
-                          className="h-11 pl-10 bg-[rgba(255,255,255,0.02)] border border-emerald-900/10 text-white placeholder-gray-500 focus:border-emerald-500 focus:ring-emerald-500"
-                          {...register("institutionname")}
-                        />
-                      </div>
-                      {errors.institutionname && <p className="text-sm text-red-600">{errors.institutionname.message}</p>}
+                  {/* Use a simple div or Fragment instead of conditional */}
+                  <div className="space-y-2">
+                    <Label htmlFor="institution" className="text-sm font-medium text-gray-300">
+                      {userType === "INSTITUTION" ? "Institution Name" : "Institution to Join"}
+                    </Label>
+                    <div className="relative">
+                      <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                      <Input
+                        id="institution"
+                        placeholder={userType === "INSTITUTION" ? "Harvard University" : "Search for your institution..."}
+                        className="h-11 pl-10 bg-[rgba(255,255,255,0.02)] border border-emerald-900/10 text-white placeholder-gray-500 focus:border-emerald-500 focus:ring-emerald-500"
+                        {...register("institutionname")}
+                      />
                     </div>
-                  )}
+                    {errors.institutionname && <p className="text-sm text-red-600">{errors.institutionname.message}</p>}
+                  </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="password" className="text-sm font-medium text-gray-300">Password</Label>

@@ -96,7 +96,7 @@ export async function POST(req: Request) {
         password: hashedPassword,
         securityId,
         usertype: usertype as Role,
-        institutionname: usertype === "INSTITUTION" ? institutionname : null,
+        institutionname: institutionname, // Save for both Students and Institutions
         admin: isAdmin,
       },
     });

@@ -22,6 +22,7 @@ import {
   ChevronRight,
   Home,
   Database,
+  Building,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -87,12 +88,39 @@ export default function DashboardSidebar({ className }: SidebarProps) {
       : item
   );
 
+  // ------------------------------------------------------------------
+  // DYNAMIC NAVIGATION LOGIC
+  // ------------------------------------------------------------------
+
   if (localUserType === "INSTITUTION" && localIsAdmin) {
+    // ADMIN VIEW
     navigationItems = navigationItems.map(item => {
+      // Admin Overview
       if (item.title === "Overview") return { ...item, href: "/dashboard/admin" };
+      // Admin Certificates
       if (item.title === "Certificates") return { ...item, href: "/dashboard/admin/certificates" };
+      // Admin Students List
+      if (item.title === "Students") return { ...item, href: "/dashboard/admin/students" };
       return item;
     });
+  } else if (localUserType === "STUDENT") {
+    // STUDENT VIEW
+    navigationItems = navigationItems.map(item => {
+      // Replace "Students" link with "Admin" (Institution Info)
+      if (item.title === "Students") {
+        return {
+          ...item,
+          title: "Admin",
+          href: "/dashboard/institution",
+          icon: Building, // Import this icon
+          badge: undefined
+        };
+      }
+      return item;
+    });
+  } else {
+    // DEFAULT / FALLBACK (e.g. Institution Member but not Admin)
+    // Hide 'Students' possibly if not allowed? For now we leave it or map it.
   }
 
   return (
