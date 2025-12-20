@@ -1,7 +1,7 @@
 "use client"
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react"
-import { useSession } from "next-auth/react"
+import { useSession, signOut as nextAuthSignOut } from "next-auth/react"
 import { authApi, getErrorMessage } from "./auth-api"
 import { sessionManager, userManager } from "./auth-utils"
 import {
@@ -144,7 +144,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           email: response.user.email,
           username: response.user.username,
           usertype: response.user.usertype,
-          institutionname: response.user.institutionname
+          institutionname: response.user.institutionname,
+          admin: response.user.admin
         },
         token: null, // Token is now in HttpOnly cookie
         refreshToken: null, // Refresh token is now in HttpOnly cookie
@@ -158,7 +159,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         email: response.user.email,
         username: response.user.username,
         usertype: response.user.usertype,
-        institutionname: response.user.institutionname
+        institutionname: response.user.institutionname,
+        admin: response.user.admin
       })
 
       return response
@@ -186,7 +188,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           email: response.user.email,
           username: response.user.username,
           usertype: response.user.usertype,
-          institutionname: response.user.institutionname
+          institutionname: response.user.institutionname,
+          admin: response.user.admin
         },
         token: null, // Token is now in HttpOnly cookie
         refreshToken: null, // Refresh token is now in HttpOnly cookie
@@ -200,7 +203,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         email: response.user.email,
         username: response.user.username,
         usertype: response.user.usertype,
-        institutionname: response.user.institutionname
+        institutionname: response.user.institutionname,
+        admin: response.user.admin
       })
 
       return response
@@ -228,7 +232,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           email: response.user.email,
           username: response.user.username,
           usertype: response.user.usertype,
-          institutionname: response.user.institutionname
+          institutionname: response.user.institutionname,
+          admin: response.user.admin
         },
         token: null, // Token is now in HttpOnly cookie
         refreshToken: null, // Refresh token is now in HttpOnly cookie
@@ -242,7 +247,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         email: response.user.email,
         username: response.user.username,
         usertype: response.user.usertype,
-        institutionname: response.user.institutionname
+        institutionname: response.user.institutionname,
+        admin: response.user.admin
       })
 
       return response
@@ -257,13 +263,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signout = async () => {
     try {
       // Call logout endpoint to clear HttpOnly cookies on server
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/logout` || "http://localhost:8000/api/users/logout", {
+      await fetch("/api/auth/logout", {
         method: 'POST',
-        credentials: 'include' // Include cookies in request
+        headers: { "Content-Type": "application/json" }
       })
     } catch (error) {
       console.error('Logout API call failed:', error)
       // Continue with client-side cleanup even if server call fails
+    }
+
+    // Clear NextAuth session
+    await nextAuthSignOut({ redirect: false })
+
+    // Clear local storage
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("usertype");
+      localStorage.removeItem("isAdmin");
     }
 
     // Clear client-side user data

@@ -28,6 +28,7 @@ export interface AuthResponse {
     username: string
     usertype?: Role | null
     institutionname?: string | null
+    admin?: boolean
   }
 }
 

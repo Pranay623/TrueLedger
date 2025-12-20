@@ -30,15 +30,25 @@ import {
   Award,
   Command,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useQuery } from "@tanstack/react-query";
+
+const fetchProfileAvatar = async (): Promise<{ avatar?: string; username: string; email: string }> => {
+  const res = await fetch("/api/users/profile");
+  if (!res.ok) throw new Error("Failed to fetch profile");
+  return res.json();
+};
 
 interface DashboardHeaderProps {
   title?: string;
   description?: string;
+  children?: React.ReactNode;
 }
 
 export default function DashboardHeader({
   title,
   description,
+  children
 }: DashboardHeaderProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -88,6 +98,15 @@ export default function DashboardHeader({
       console.error("Failed to mark notifications as read", err);
     }
   };
+
+  /* ---------------- Fetch Profile Avatar (TanStack Query) ---------------- */
+  const { data: profileData, isLoading: isLoadingProfile } = useQuery({
+    queryKey: ["headerProfile"],
+    queryFn: fetchProfileAvatar,
+    staleTime: 5 * 60 * 1000, // 5 minutes cache
+  });
+
+  const avatarUrl = profileData?.avatar || (profileData?.username ? `https://api.dicebear.com/7.x/initials/svg?seed=${profileData.username}` : "");
 
   useEffect(() => {
     fetchNotifications();
@@ -152,14 +171,20 @@ export default function DashboardHeader({
 
           {/* QUICK ACTIONS */}
           <div className="hidden lg:flex gap-2">
-            <Button size="sm" variant="outline" className="border-emerald-800/30 text-emerald-300">
-              <Zap className="w-3 h-3 mr-1" />
-              Quick Scan
-            </Button>
-            <Button size="sm" variant="outline" className="border-emerald-800/30 text-emerald-300">
-              <Award className="w-3 h-3 mr-1" />
-              New Certificate
-            </Button>
+            {children ? (
+              children
+            ) : (
+              <>
+                <Button size="sm" variant="outline" className="border-emerald-800/30 text-emerald-300">
+                  <Zap className="w-3 h-3 mr-1" />
+                  Quick Scan
+                </Button>
+                <Button size="sm" variant="outline" className="border-emerald-800/30 text-emerald-300">
+                  <Award className="w-3 h-3 mr-1" />
+                  New Certificate
+                </Button>
+              </>
+            )}
           </div>
 
           {/* NOTIFICATIONS */}
@@ -191,9 +216,18 @@ export default function DashboardHeader({
               <DropdownMenuSeparator />
 
               {loadingNotifications ? (
-                <p className="text-sm text-gray-500 px-3 py-4">
-                  Loading…
-                </p>
+                <div className="p-3 space-y-3">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="flex gap-3">
+                      <Skeleton className="w-2 h-2 rounded-full mt-2 bg-gray-700" />
+                      <div className="flex-1 space-y-2">
+                        <Skeleton className="w-48 h-4 bg-gray-800" />
+                        <Skeleton className="w-full h-3 bg-gray-800" />
+                        <Skeleton className="w-24 h-3 bg-gray-800" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
               ) : notifications.length === 0 ? (
                 <p className="text-sm text-gray-500 px-3 py-4">
                   No notifications
@@ -205,9 +239,8 @@ export default function DashboardHeader({
                     className="flex gap-3 p-3 hover:bg-gray-900 rounded-lg cursor-pointer"
                   >
                     <div
-                      className={`w-2 h-2 rounded-full mt-2 ${
-                        n.read ? "bg-gray-500" : "bg-emerald-500"
-                      }`}
+                      className={`w-2 h-2 rounded-full mt-2 ${n.read ? "bg-gray-500" : "bg-emerald-500"
+                        }`}
                     />
                     <div className="flex-1">
                       <p className="text-sm font-medium">{n.title}</p>
@@ -234,13 +267,20 @@ export default function DashboardHeader({
           {/* USER MENU */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-10 w-10 rounded-full">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src="" />
-                  <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-500 text-black font-semibold">
-                    {user?.email ? getUserInitials(user.email) : "U"}
-                  </AvatarFallback>
-                </Avatar>
+              <Button variant="ghost" className="h-10 w-10 rounded-full relative group p-0 overflow-hidden">
+                {isLoadingProfile || (!avatarUrl && !user?.email) ? (
+                  <div className="relative h-10 w-10">
+                    <Skeleton className="h-10 w-10 rounded-full bg-gray-800 animate-pulse border border-gray-700" />
+                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent animate-shimmer" />
+                  </div>
+                ) : (
+                  <Avatar className="h-10 w-10 border border-emerald-900/30 group-hover:border-emerald-500/50 transition-colors">
+                    <AvatarImage src={avatarUrl} className="object-cover" />
+                    <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-500 text-black font-semibold">
+                      {user?.email ? getUserInitials(user.email) : "U"}
+                    </AvatarFallback>
+                  </Avatar>
+                )}
               </Button>
             </DropdownMenuTrigger>
 
@@ -255,13 +295,13 @@ export default function DashboardHeader({
 
               <DropdownMenuSeparator />
 
-              <DropdownMenuItem onClick={() => router.push("/dashboard/profile") }>
+              <DropdownMenuItem onClick={() => router.push("/dashboard/profile")}>
                 <User className="mr-2 h-4 w-4" /> Profile
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push("/dashboard/settings") }>
+              <DropdownMenuItem onClick={() => router.push("/dashboard/settings")}>
                 <Settings className="mr-2 h-4 w-4" /> Settings
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push("/dashboard/help") }>
+              <DropdownMenuItem onClick={() => router.push("/dashboard/help")}>
                 <HelpCircle className="mr-2 h-4 w-4" /> Help
               </DropdownMenuItem>
 

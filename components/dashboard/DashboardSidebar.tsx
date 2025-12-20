@@ -66,6 +66,20 @@ export default function DashboardSidebar({ className }: SidebarProps) {
     fetchCertificateCount();
   }, []);
 
+  // Use localStorage for user type and admin status as requested
+  const [localUserType, setLocalUserType] = useState<string | null>(null);
+  const [localIsAdmin, setLocalIsAdmin] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedType = localStorage.getItem("usertype");
+      const storedAdmin = localStorage.getItem("isAdmin") === "true";
+
+      setLocalUserType(storedType);
+      setLocalIsAdmin(storedAdmin);
+    }
+  }, []);
+
   // Inject dynamic badge for certificates
   let navigationItems = navigationItemsBase.map((item) =>
     item.title === "Certificates"
@@ -73,21 +87,7 @@ export default function DashboardSidebar({ className }: SidebarProps) {
       : item
   );
 
-  // Custom Override for Admin
-  // We need to access the user context here, but DashboardSidebar is used in Layout which is used in ProtectedRoute.
-  // We can try to get user from useAuth if available, or just check local storage/cookie if strictly needed client side.
-  // Better yet, let's just use the client side auth context.
-
-  const { user } = useAuth();
-  console.log("DashboardSidebar user:", user);
-  console.log("user type:", user?.usertype);
-
-  // AuthContext is populated for email/JWT logins.
-  // NextAuth session is populated for Google logins.
-  const { data: session } = useSession();
-  const usertype = user?.usertype ?? (session?.user as any)?.usertype;
-
-  if (usertype === "INSTITUTION") {
+  if (localUserType === "INSTITUTION" && localIsAdmin) {
     navigationItems = navigationItems.map(item => {
       if (item.title === "Overview") return { ...item, href: "/dashboard/admin" };
       if (item.title === "Certificates") return { ...item, href: "/dashboard/admin/certificates" };

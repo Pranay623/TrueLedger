@@ -113,7 +113,19 @@ export default function SignupPage() {
       }
 
       // SUCCESS — user created, cookies set by backend
-      router.push("/dashboard");
+
+      // Store user details in localStorage as requested
+      if (typeof window !== "undefined") {
+        localStorage.setItem("usertype", response.user.usertype || "");
+        localStorage.setItem("isAdmin", response.user.admin ? "true" : "false");
+      }
+
+      // Redirect based on role
+      if (response.user.usertype === "INSTITUTION" && response.user.admin) {
+        router.push("/dashboard/admin");
+      } else {
+        router.push("/dashboard");
+      }
 
     } catch (err) {
       console.error(err);

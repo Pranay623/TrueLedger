@@ -79,7 +79,24 @@ export default function SigninPage() {
         }
       }
 
-      router.push("/dashboard");
+      // Store user details in localStorage as requested
+      if (typeof window !== "undefined") {
+        localStorage.setItem("usertype", response.user.usertype || "");
+        localStorage.setItem("isAdmin", response.user.admin ? "true" : "false");
+      }
+
+      if (response.user.usertype === "INSTITUTION") {
+        // Check for admin status if available, or default to admin dashboard for institution type for now if implicit
+        if (response.user.admin) {
+          router.push("/dashboard/admin");
+        } else {
+          // Non-admin institution users (staff?) - currently default to main dashboard or handle accordingly
+          // User request: "if and only if in institution the person is admin then only the admin dashboard be open"
+          router.push("/dashboard");
+        }
+      } else {
+        router.push("/dashboard");
+      }
     } catch (error) {
       console.error("Signin error:", error);
 

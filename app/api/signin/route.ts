@@ -91,6 +91,7 @@ export async function POST(req: Request) {
           email: user.email,
           username: user.username,
           usertype: user.usertype,
+          admin: user.admin,
         },
       },
       { status: 200 }
